@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block pagecontent %}
+<div class="container">
+<div class="page-header">
+	<img src="http://placehold.it/300x120&text=School%20Banner" class="pull-right" alt="">
+  <h1> {{ school.name }} {% if school.shortbio %}<small>{{ school.shortbio }}</small>{% endif %} </h1>
+</div>
+</div>
+{% endblock %}

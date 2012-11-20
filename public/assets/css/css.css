@@ -1,0 +1,124 @@
+.pagecontent
+{
+	padding: 41px 0 0;
+}
+
+.masthead
+{
+	text-align: center;
+	background-color:#EDEAFB;
+	padding: 50px 0 30px;
+	margin: 0;
+}
+
+.masthead.error
+{
+	color: red;
+	background-color: white;
+}
+
+.masthead h1
+{
+	font-family: 'Signika', sans-serif;
+	font-size: 140px;
+	line-height: 80px;
+	letter-spacing: -3px;
+	padding-bottom: 0px;
+}
+
+.masthead p.tagline
+{
+	font-size: 35px;
+	font-weight: 300;
+	line-height: 60px;
+	padding: 0;
+	margin: 10px 0;
+	letter-spacing: -1px;
+}
+
+.highlight-open
+{
+	background-color: #6E657E;
+	color: white;
+	text-align: center;
+	padding: 10px;
+}
+
+.highlight-open h2
+{
+	font-family: 'Signika', sans-serif;
+	font-weight: 400;
+	font-size: 50px;
+	-margin: 10px 0px 5px;	
+}
+
+.marketing
+{
+	padding: 20px 0;
+	
+}
+
+.marketing h2
+{
+	font-weight: 100;
+	font-size: 45px;
+	margin: 10px 0px 20px;
+	text-align: center;
+}
+
+.marketing h3
+{
+	font-size: 30px;
+}
+
+/*footer
+{
+	background-color: #666;
+	color: white;
+}
+*/
+footer .container
+{
+	border-top: solid 1px #eee;
+	margin-top: 30px;
+	padding: 10px 0;
+	font-size: 90%;
+}
+
+/*footer a,
+footer a:hover,
+footer a:visited
+{
+	color: #ccf;
+	font-weight: bold;
+}
+*/
+
+.links-list {
+margin-left: 0;
+margin-bottom: 0;
+padding-left: 0;
+list-style: none;
+}
+
+.links-list li {
+display: inline-block;
+padding: 0 8px 0 0;
+line-height: 1;
+}
+
+a.brand {
+	font-family: 'Signika', sans-serif;
+}
+
+.right {
+	text-align: right;
+}
+
+.center {
+	text-align: center;
+}
+
+.left {
+	text-align: left;
+}
