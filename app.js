@@ -229,36 +229,52 @@ var members = {
 };
 
 var schools = {
+	"123singwithme": {
+		"id":6, 
+		"webname": "123singwithme",
+		"name":"1-2-3 Sing With Me",
+		"catchphrase":"Music classes for children 6 mo - 5 years",
+		"summary":"1-2-3 Sing With Me offers fun and interactive music classes for children 6 months - 5 years.",
+		"description":"Join us for singing & nursery rhymes, puppets & games, where children have fun & learn numbers too! As well as being lots of fun, our hour long classes are great for:<ul><li>Early numeracy skills</li><li>Boosting language skills</li><li>Developing confidence</li><li>Gross & fine motor skills</li></ul>",
+		"www":"www.123singwithme.com.au",
+		"phone":"(02) 9908 1234",
+		"colour":"E01B6A"
+	} 
+	,
 	"first_guitar": {
 		"id":1, 
-		"name":"First Guitar School",
 		"webname": "first_guitar",
-		"shortbio":"Riffing it since 1978",
-	},
+		"name":"First Guitar School",
+		"catchphrase":"Riffing it since 1978",
+	}
+	,
 	"piano_man": {
 		"id":2, 
-		"name":"The Piano Man",
 		"webname": "piano_man",
-		"shortbio":"Jazzing classics for all ages",
-	},
+		"name":"The Piano Man",
+		"catchphrase":"Jazzing classics for all ages",
+	}
+	,
 	"sydney_jazz": {
 		"id":3, 
-		"name":"Sydney Jazz",
 		"webname": "sydney_jazz",
-		"shortbio":"Oldest sydney jazz guitar school",
-	},
+		"name":"Sydney Jazz",
+		"catchphrase":"Oldest sydney jazz guitar school",
+	}
+	,
 	"singarama": {
 		"id":4, 
-		"name":"Singarama",
 		"webname": "singarama",
-		"shortbio":"Singing lessons for tv professionals",
-	},
+		"name":"Singarama",
+		"catchphrase":"Singing lessons for tv professionals",
+	}
+	,
 	"bondipiano": {
 		"id":5, 
-		"name":"Bondi Piano School",
 		"webname": "bondipiano",
-		"shortbio":"Classical piano tuition for children 6+",
-	} 
+		"name":"Bondi Piano School",
+		"catchphrase":"Classical piano tuition for children 6+",
+	}
 }
 
 

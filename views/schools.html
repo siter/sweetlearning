@@ -3,7 +3,7 @@
 {% block pagecontent %}
 <div class="container">
 <div class="page-header">
-  <h1>Browse Schools</h1>
+  <h1>School Browser</h1>
 </div>
 
 {% if schools %}
@@ -11,9 +11,9 @@
 {% for school in schools %}
 	<li class="span4">
 	  	  <a href="/schools/{{school.webname}}" class="thumbnail">
-	  	      <img src="http://placehold.it/300x120&text=School%20Banner" alt="">
+	  	      <img src="http://placehold.it/300x120&text={{school.name}}" alt="">
 	        <h3>{{school.name}}</h3>
-	        <p>{{school.shortbio}}</p>
+	        <p>{{school.catchphrase}}</p>
   	  </a>
 	</li>
 {% endfor %}

@@ -2,9 +2,35 @@
 
 {% block pagecontent %}
 <div class="container">
-<div class="page-header">
-	<img src="http://placehold.it/300x120&text=School%20Banner" class="pull-right" alt="">
-  <h1> {{ school.name }} {% if school.shortbio %}<small>{{ school.shortbio }}</small>{% endif %} </h1>
-</div>
+	<div class="page-header">
+	  <h1>{{ school.name }} {% if school.catchphrase %}<small>{{ school.catchphrase }}</small>{% endif %}</h1>
+	</div>
+
+	<div class="row">
+		<div class="span8">
+
+
+			{% if school.summary %}
+			<p class="lead">{{ school.summary }}</p>
+			{% endif %}
+
+			{% if school.description %}
+			<p>
+				{% autoescape false %}
+				{{ school.description }}
+				{% endautoescape %}
+			</p>
+			{% endif %}
+			
+		</div>
+		<div class="span4">
+			<!-- Contact Info -->
+			<ul class="nav nav-tabs nav-stacked">
+				{% if school.phone %}<li><a href="tel: {{ school.phone }}">{{ school.phone }}</a></li>{% endif %}
+				{% if school.www %}<li><a href="http://{{ school.www }}">{{ school.www }}</a></li>{% endif %}
+				{% if school.fb %}<li><a href="{{ school.fb }}">Facebook</a></li>{% endif %}
+			</ul>
+		</div>
+	</div>
 </div>
 {% endblock %}
