@@ -12,7 +12,7 @@ h1, h2, h3, h4, h5
 .masthead
 {
 	text-align: center;
-	background-color:#EDEAFB;
+	background-color:#95f6b9;#EDEAFB;
 	padding: 50px 0 30px;
 	margin: 0;
 }
@@ -127,4 +127,17 @@ a.brand {
 
 .left {
 	text-align: left;
+}
+
+.sidebar h2
+{
+	font-size: 130%;
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+.hero-unit
+{
+	margin-top: 10px;
+	background-color: #97DEC7; #95f6b9;
 }

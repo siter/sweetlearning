@@ -75,6 +75,7 @@ app.configure(function(){
 	app.engine('.html', cons.swig);
 	app.set('view engine', 'html');
 	app.use(express.favicon(__dirname + '/public/assets/img/favicon.ico'));
+	app.use(express.static(path.join(__dirname, 'public')));
 
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
@@ -88,7 +89,6 @@ app.configure(function(){
 	app.use(load_member);
 
 	app.use(app.router);
-	app.use(express.static(path.join(__dirname, 'public')));
 
 
 	// 404 catch-all
@@ -179,6 +179,10 @@ app.get('/schools', function(req, res){
 	res.render('schools', {schools:schools});
 });
 
+app.get('/info', function(req, res){
+	res.render('info');
+});
+
 
 
 //// functions
@@ -236,9 +240,11 @@ var schools = {
 		"catchphrase":"Music classes for children 6 mo - 5 years",
 		"summary":"1-2-3 Sing With Me offers fun and interactive music classes for children 6 months - 5 years.",
 		"description":"Join us for singing & nursery rhymes, puppets & games, where children have fun & learn numbers too! As well as being lots of fun, our hour long classes are great for:<ul><li>Early numeracy skills</li><li>Boosting language skills</li><li>Developing confidence</li><li>Gross & fine motor skills</li></ul>",
-		"www":"www.123singwithme.com.au",
-		"phone":"(02) 9908 1234",
-		"colour":"E01B6A"
+		"contact": {
+			"www":"www.123singwithme.com.au",
+			"phone":"(02) 9908 1234",
+			"email":"info@123singwithme.com.au"
+		}
 	} 
 	,
 	"first_guitar": {
