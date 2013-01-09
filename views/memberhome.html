@@ -1,1 +1,29 @@
-{% include 'me.html' %}
+{% extends 'layouts/layout.html' %}
+
+{% block pagecontent %}
+
+<div class="container">
+<div class="page-header">
+  <h1>Your profile <small>View and change your details</small></h1>
+</div>
+<h2>{{ user.displayName }}</h2>
+<p>
+i'm {{ user.displayName }} <br />
+</p>
+<a class="btn btn-primary btn-large" href="/me/addschool">Add School</a>
+</div>
+
+{% if schools %}
+<div class="container">
+  <h2>Your schools</h2>
+  <p>
+  <ul>
+  {% for school in schools %}
+      <li>{{ school.name }}</li>
+  {% endfor %}
+  </ul>
+  </p>
+</div>
+{% endif %}
+
+{% endblock %}

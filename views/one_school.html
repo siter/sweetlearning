@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'layouts/layout.html' %}
 
 {% block title %}{{ school.name }} - School Information{% endblock %}
 
@@ -23,18 +23,17 @@
 			{% endif %}	
 			
 			<hr />
-			<!-- Member-added sections -->
-			<h2>Enrollments</h2>
-			<p>Our term4 enrolments are now underway. If you'd like to join us for term4 then please call us on  9908 1234  now for further details and to request your enrolment pack. Alternatively send an email to info@123singwithme.com.au
-			</p>
+			{# Member-added sections #}
+
+			{% if school.text_sections %}
+
+			{% for section in school.text_sections %}
+			<h2>{{ section.title }}</h2>
+			<p>{{ section.text }}</p>
+			{% endfor %}
+
+			{% endif %}	
 			
-			<h2>School Activity</h2>
-			<p>Our term4 enrolments are now underway. If you'd like to join us for term4 then please call us on  9908 1234  now for further details and to request your enrolment pack. Alternatively send an email to info@123singwithme.com.au
-			</p>
-			
-			{#
-			{% include 'shared/testimonials.html' %}
-			#}
 		</div>
 		
 		
@@ -44,20 +43,20 @@
 			</p>
 			
 			{% if school.contact %}
-			<h2>Quick Contact Info</h2>
+			<h2>School Contact Info</h2>
 			<!-- Contact Info -->
 			<ul class="nav nav-pills nav-stacked">
-				{% if school.contact.www %}<li><a href="http://{{ school.contact.www }}">Website: <b>{{school.name}}</b></a></li>{% endif %}
 				{% if school.contact.phone %}<li><a href="tel: {{ school.contact.phone }}">Call Now: <b>{{ school.contact.phone }}</b></a></li>{% endif %}
+				{% if school.contact.www %}<li><a href="http://{{ school.contact.www }}">Website: <b>{{school.name}}</b></a></li>{% endif %}
 				{% if school.contact.fb %}<li><a href="{{ school.contact.fb }}">Facebook</a></li>{% endif %}
 			</ul>
 			{% endif %}
-			<h2>Downloads</h2>
+			<!-- <h2>Downloads</h2>
 			<ul class="nav nav-pills nav-stacked">
 				<li><a href="#">Application Form</a></li>
 				<li><a href="#">Direct Debit Form</a></li>
 				<li><a href="#">General Information Booklet</a></li>
-			</ul>
+			</ul> -->
 			<p>
 			</p>
 		</div>

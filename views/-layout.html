@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}Find schools and classes to take you to the next level{% endblock %} on Sweet Learning</title>
+	<meta name="description" content="{% block description %}Learn music, art, sport, trade skills from teachers and schools all conveniently listed on one site.{% endblock %}">
+	
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/ext/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/ext/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+	<link href='http://fonts.googleapis.com/css?family=Signika:700|Montserrat:400,700' rel='stylesheet' type='text/css'>    
+	<link href="/assets/css/css.css" rel="stylesheet">
+
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35327114-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<div class="row">
+				<div class="span3">
+					<a class="brand" href="/">Sweet Learning</a>					
+				</div>
+				<div class="span6">
+					<ul class="nav">
+						<li><a href="/schools">Browse Schools</a></li>
+					</ul>
+					<form class="navbar-search pull-left" action="/search" method="get">
+			            <input name="q" {% if q %}value="{{ q }}"{% endif%} type="text" class="search-query span4" placeholder="Search teachers and courses&hellip;">
+			        </form>					
+				</div>
+				<div class="span3 right">
+					<div class="btn-group left">
+						{% if user %}
+						<a class="btn" href="/me"><i class="icon-user"></i> {{ user.displayName }}</a>
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+						<ul class="dropdown-menu">
+						<li><a href="/me/edit"><i class="icon-pencil"></i> Edit Account</a></li>
+						<li class="divider"></li>
+						<li><a href="/logout"><i class="icon-off"></i> Log Out</a></li>
+						</ul>
+						{% else %}
+						<a class="btn btn-primary" href="/register">Register</a>
+						<a class="btn" href="/login">Log In</a>
+						{% endif %}
+					</div>					
+				</div>
+			</div>
+					
+	</div>
+</div>
+</div>	
+
+<div class="pagecontent">	
+{% block pagecontent %}{% endblock %}
+</div>
+
+<footer>
+<div class="container">
+	<div class="row">
+		
+		<div class="span6 center">
+			<ul class="links-list">
+				<li><a href="/info">See what's good about being on <b>Sweet Learning</b></a></li>
+			</ul>	
+		</div>
+		<div class="span6 center">
+			<ul class="links-list">
+				<li><a href="/contact">Contact</a></li>
+				<li><a href="/privacy">Privacy</a></li>
+				<li>&copy; Sweet Learning 2012</li>
+			</ul>	
+		</div>
+	</div>	
+</div>
+</footer>
+	
+<script src="/ext/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script src="/ext/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>	
+</body>
+</html>

@@ -1,35 +1,66 @@
-{% extends 'layout.html' %}
+{% extends 'layouts/layout.html' %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block pagecontent %}
 <div class="container">
 
 {% if member %}
-logged in <a href="/me">View Account</a>
+<div class="page-header">
+  <h1>You are already in </h1>
+</div>
+Jump to: <a href="/me">My Account</a>
 {% else %}
-<a href="/auth/facebook">Login with Facebook</a>
 
-<form class="form-horizontal" action="/login" method="post">
-  <div class="control-group">
-    <label class="control-label" for="inputEmail">Email</label>
-    <div class="controls">
-      <input type="text" name="email" id="inputEmail" placeholder="Email">
-    </div>
+<div class="page-header">
+  <h1>Login to Sweet Learning<small> access your account and see extra features</small></h1>
+</div>
+
+<div class="row">
+  <div class="span6" style="background-color: #eee; padding: 10px 0;">
+  	<h2 class="center">Standard Login</h2>
+	  <form class="form-horizontal" action="/login" method="post">
+	
+	    <div class="control-group">
+	      <label class="control-label" for="inputEmail">Email Address</label>
+	      <div class="controls">
+		      <div class="input-prepend">
+		        <span class="add-on"><i class="icon-envelope"></i></span>
+		        <input type="text" name="email" id="inputEmail" placeholder="Email">
+		      </div>
+			  
+	      </div>
+	    </div>
+		
+	    <div class="control-group">
+	      <label class="control-label" for="inputPassword">Password</label>
+	      <div class="controls">
+		      <div class="input-prepend">
+		        <span class="add-on"><i class="icon-asterisk"></i></span>
+		        <input type="password" name="password" id="inputPassword" placeholder="Password">
+		      </div>
+	      </div>
+	    </div>
+		
+	    <div class="control-group">
+	      <div class="controls">
+	        <button type="submit" class="btn btn-large">Sign in</button>
+			<hr />
+			<p><a href="/login/forgot">Forgot password?</a></p>
+	      </div>
+	    </div>
+	  </form>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="inputPassword">Password</label>
-    <div class="controls">
-      <input type="password" name="password" id="inputPassword" placeholder="Password">
-    </div>
+  
+  <div class="span6">
+    	<h2>External Login</h2>
+	  <strong><a href="/auth/facebook" class="btn btn-large btn-primary">Login with Facebook</a></strong>
   </div>
-  <div class="control-group">
-    <div class="controls">
-      <label class="checkbox">
-        <input type="checkbox"> Remember me
-      </label>
-      <button type="submit" class="btn">Sign in</button>
-    </div>
-  </div>
-</form>
+
+</div>
+
+
 
 
 {% endif %}

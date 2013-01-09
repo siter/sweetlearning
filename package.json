@@ -7,15 +7,19 @@
   },
 
   "dependencies": {
-    "express": "3.0.*",
+    "express": "3.0.6",
     "consolidate": "0.4.*",
 	"swig": "0.13.*",
-	"everyauth": "0.3.*"
+	"passport": "0.1.15",
+	"passport-local": "0.1.6",
+	"passport-facebook": "0.1.4",
+	"mongodb": "1.2.8",
+	"mongoose": "3.5.4" 
 	
   },
 
   "engines": {
-    "node": ">0.8.12"
+    "node": ">0.8.16"
   }
 
 }

@@ -1,30 +1,25 @@
-{% extends 'layout.html' %}
+{% extends 'layouts/layout.html' %}
 
 {% block pagecontent %}
+
 <div class="container">
 <div class="page-header">
-  <h1>Your profile <small>View and change your details</small></h1>
+  <h1>{{ user.displayName }} <small><a class="btn" href="/me/edit">Edit Profile</a></small></h1>
 </div>
-<h2>{{ user.displayName }}</h2>
-<p>
-i'm {{ user.displayName }} <br />
-</p>
-<a class="btn btn-primary btn-large" href="/me/addschool">Add School</a>
+<img src="http://placehold.it/150x150/FFFF00/000000&text=Photo" alt="" />
+
 </div>
 
-{% if schools %}
 <div class="container">
   <h2>Your schools</h2>
-  <p>
+  {% if schools %}
   <ul>
   {% for school in schools %}
-      <li>{{ school.name }}</li>
+      <li><a href="/schools/{{ school.webname }}">{{ school.name }}</a></li>
   {% endfor %}
   </ul>
-  </p>
+  {% endif %}
+  <a class="btn" href="/me/addschool">Start New School</a>
 </div>
-{% endif %}
-
-
 
 {% endblock %}

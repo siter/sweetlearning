@@ -1,0 +1,40 @@
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<div class="row">
+				<div class="span3">
+					<a class="brand" href="/">Sweet Learning</a>					
+				</div>
+				<div class="span6">
+					<ul class="nav">
+						<li><a href="/schools">Browse Schools</a></li>
+					</ul>
+					<form class="navbar-search pull-left" action="/search" method="get">
+			            <input name="q" {% if q %}value="{{ q }}"{% endif%} type="text" class="search-query span4" placeholder="Search teachers and courses&hellip;">
+			        </form>					
+				</div>
+				<div class="span3 right">
+					<div class="btn-group left">
+						{% if user %}
+						<!-- <a class="btn" href="/me"></a> -->
+						<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#" href="/me">
+							{{ user.displayName }}
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a tabindex="-1" href="/me"><i class="icon-user"></i> My Profile</a></li>
+							<li><a tabindex="-1" href="/me/edit"><i class="icon-edit"></i> Edit Profile</a></li>
+							<li class="divider"></li>
+							<li><a tabindex="-1" href="/logout"><i class="icon-off"></i> Log Out</a></li>
+						</ul>
+						{% else %}
+						<a class="btn btn-primary" href="/register">Register</a>
+						<a class="btn" href="/login">Log In</a>
+						{% endif %}
+					</div>					
+				</div>
+			</div>
+					
+	</div>
+</div>
+</div>	

@@ -112,18 +112,24 @@ app.get('/auth/facebook/callback',
 
 
 // require auth
-app.get('/me', restricted, function(req, res){
-	res.locals.schools = [{'name':"piano school"},{'name':"guitar school"}];
+app.get('/me', restricted, load_member_schools, function(req, res){
+	// res.locals.schools = [];
+	// for (var i = member_schools[req.user.uid].length - 1; i >= 0; i--){
+	// 	var sid = member_schools[req.user.uid][i];
+	// 	res.locals.schools.push({webname:sid,"name":schools[sid].name})
+	// };
+	res.render('me');
+});
+
+app.get('/me/edit', restricted, function(req, res){
 	res.render('me');
 });
 
 
-
 // public
 app.get('/', function(req, res){
-	ddd(req.session);
 	if (req.user) {
-		ddd(req.user);
+		// ddd(req.user);
 		res.render('memberhome');
 	} else {
 		res.render('home');			
@@ -200,9 +206,19 @@ function restricted(req, res, next) {
 
 function load_member(req, res, next){
 	if (req.user) {
-		res.locals.user = req.user;		
+//		ddd(req.user);
+		res.locals.user = req.user;	
 	}
   	next();
+}
+
+function load_member_schools(req, res, next){
+	res.locals.schools = [];
+	for (var i = member_schools[req.user.uid].length - 1; i >= 0; i--){
+		var sid = member_schools[req.user.uid][i];
+		res.locals.schools.push({webname:sid,"name":schools[sid].name})
+	};
+	next();
 }
 
 
@@ -232,6 +248,10 @@ var members = {
 	_123: {"id":123, "name":"Graham Green"}
 };
 
+var member_schools = {
+	'fb_536852454': ['123singwithme', 'sydney_jazz']
+}
+
 var schools = {
 	"123singwithme": {
 		"id":6, 
@@ -244,7 +264,13 @@ var schools = {
 			"www":"www.123singwithme.com.au",
 			"phone":"(02) 9908 1234",
 			"email":"info@123singwithme.com.au"
-		}
+		},
+		"text_sections": [
+			{
+				"title":"Enrollments",
+				"text":"Our term4 enrolments are now underway. If you'd like to join us for term4 then please call us on 9908 1234 now for further details and to request your enrolment pack. Alternatively send an email to info@123singwithme.com.au"
+			}
+		]
 	} 
 	,
 	"first_guitar": {
