@@ -2,6 +2,7 @@
   "name": "sweetlearning",
   "version": "0.1.0",
   "private": true,
+  
   "scripts": {
     "start": "node app"
   },
@@ -10,10 +11,11 @@
     "express": "3.0.6",
     "consolidate": "0.7.0",
 	"swig": "0.13.4",
+	"mongoose": "3.5.4",
+
 	"passport": "0.1.15",
 	"passport-local": "0.1.6",
-	"passport-facebook": "0.1.4",
-	"mongoose": "3.5.4" 
+	"passport-facebook": "0.1.4"
 	
   },
 
