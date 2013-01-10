@@ -1,8 +1,7 @@
 Sweet Learning Web Application
 
 requires 
-node 0.8.12+
-npm
+node 0.8.16 + npm
 heroku toolbelt
 
 installing
