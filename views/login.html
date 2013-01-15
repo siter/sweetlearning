@@ -19,7 +19,7 @@ Jump to: <a href="/me">My Account</a>
 
 <div class="row">
   <div class="span6" style="background-color: #eee; padding: 10px 0;">
-  	<h2 class="center">Standard Login</h2>
+  	<h2 class="center">Standard Login <small>Disabled</small></h2>
 	  <form class="form-horizontal" action="/login" method="post">
 	
 	    <div class="control-group">
@@ -27,7 +27,7 @@ Jump to: <a href="/me">My Account</a>
 	      <div class="controls">
 		      <div class="input-prepend">
 		        <span class="add-on"><i class="icon-envelope"></i></span>
-		        <input type="text" name="email" id="inputEmail" placeholder="Email">
+		        <input type="text" name="email" id="inputEmail" placeholder="Email" disabled>
 		      </div>
 			  
 	      </div>
@@ -38,16 +38,18 @@ Jump to: <a href="/me">My Account</a>
 	      <div class="controls">
 		      <div class="input-prepend">
 		        <span class="add-on"><i class="icon-asterisk"></i></span>
-		        <input type="password" name="password" id="inputPassword" placeholder="Password">
+		        <input type="password" name="password" id="inputPassword" placeholder="Password" disabled>
 		      </div>
 	      </div>
 	    </div>
 		
 	    <div class="control-group">
 	      <div class="controls">
-	        <button type="submit" class="btn btn-large">Sign in</button>
-			<hr />
-			<p><a href="/login/forgot">Forgot password?</a></p>
+	        <button type="submit" class="btn btn-large disabled">Sign in</button>
+			{#
+				<hr />
+				<p><a href="/login/forgot">Forgot password?</a></p>
+			#}
 	      </div>
 	    </div>
 	  </form>
