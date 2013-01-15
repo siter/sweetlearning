@@ -12,7 +12,22 @@ var express 	= require('express')
   
   , passport 	= require('passport')
   , fb_strategy	= require('passport-facebook').Strategy;
+  
+var mongoose	= require('mongoose'),
+	Schema 		= mongoose.Schema,
+	ObjectId 	= Schema.ObjectId;
 
+var mongoose_options = { db: { safe: true }}
+mongoose.connect('mongodb://localhost/sl_test', mongoose_options);
+
+var db =  mongoose.connection;
+
+//
+// Mongoose SCHEMAS
+//
+var User = mongoose.Schema({
+	
+});
 
 var users = {};
 
@@ -113,11 +128,6 @@ app.get('/auth/facebook/callback',
 
 // require auth
 app.get('/me', restricted, load_member_schools, function(req, res){
-	// res.locals.schools = [];
-	// for (var i = member_schools[req.user.uid].length - 1; i >= 0; i--){
-	// 	var sid = member_schools[req.user.uid][i];
-	// 	res.locals.schools.push({webname:sid,"name":schools[sid].name})
-	// };
 	res.render('me');
 });
 
@@ -129,7 +139,7 @@ app.get('/me/edit', restricted, function(req, res){
 // public
 app.get('/', function(req, res){
 	if (req.user) {
-		// ddd(req.user);
+		res.redirect('/me'); return;
 		res.render('memberhome');
 	} else {
 		res.render('home');			
@@ -169,6 +179,12 @@ app.post('/login', function(req, res){
 		res.render('login');
     });
 });
+
+app.get('/register', function(req, res){
+
+	
+});
+
 
 app.get('/logout', function(req, res){
 	req.logOut();
