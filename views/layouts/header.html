@@ -2,18 +2,16 @@
 	<div class="navbar-inner">
 		<div class="container">
 			<div class="row">
-				<div class="span3">
+				<div class="span8">
 					<a class="brand" href="/">Sweet Learning</a>					
-				</div>
-				<div class="span6">
+					<form class="navbar-search" action="/search" method="get">
+			            <input name="q" {% if q %}value="{{ q }}"{% endif%} type="text" class="search-query span3" placeholder="Search to learn&hellip;">
+			        </form>
 					<ul class="nav">
 						<li><a href="/schools">Browse Schools</a></li>
 					</ul>
-					<form class="navbar-search pull-left" action="/search" method="get">
-			            <input name="q" {% if q %}value="{{ q }}"{% endif%} type="text" class="search-query span4" placeholder="Search teachers and courses&hellip;">
-			        </form>					
 				</div>
-				<div class="span3 right">
+				<div class="span4 right">
 					<div class="btn-group left">
 						{% if user %}
 						<!-- <a class="btn" href="/me"></a> -->
