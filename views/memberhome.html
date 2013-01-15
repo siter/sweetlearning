@@ -2,28 +2,57 @@
 
 {% block pagecontent %}
 
-<div class="container">
-<div class="page-header">
-  <h1>Your profile <small>View and change your details</small></h1>
-</div>
-<h2>{{ user.displayName }}</h2>
-<p>
-i'm {{ user.displayName }} <br />
-</p>
-<a class="btn btn-primary btn-large" href="/me/addschool">Add School</a>
-</div>
+<div class="container">	
+	<h2>Schools You Follow <small>and their updates</small></h2>
+	<ul class="thumbnails">
+		<li class="span3">
+			<a href="/schools" class="thumbnail">
+				<img src="http://placehold.it/260x100" alt="school">
+				<h4>School name</h4>
+			</a>
+		</li>
+		<li class="span3">
+			<a href="/schools" class="thumbnail">
+				<img src="http://placehold.it/260x100" alt="school">
+				<h4>Longer School name</h4>
+			</a>
+		</li>
+		<li class="span3">
+			<a href="/schools" class="thumbnail">
+				<img src="http://placehold.it/260x100" alt="school">
+				<h4>Some Teacher</h4>
+			</a>
+		</li>
+		<li class="span3">
+			<a href="/schools" class="thumbnail">
+				<img src="http://placehold.it/260x100" alt="school">
+				<h4>Just a School</h4>
+			</a>
+		</li>
+	</ul>
 
-{% if schools %}
-<div class="container">
-  <h2>Your schools</h2>
-  <p>
-  <ul>
-  {% for school in schools %}
-      <li>{{ school.name }}</li>
-  {% endfor %}
-  </ul>
-  </p>
+	<div class="media">
+	  <a class="pull-left" href="#">
+	    <img class="media-object" src="http://placehold.it/64x64">
+	  </a>
+	  <div class="media-body">
+	    <h4 class="media-heading">Bondi Social</h4>
+		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</p>
+		<p>Commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+	  </div>
+	</div>
+	
+	<div class="media">
+	  <a class="pull-left" href="#">
+	    <img class="media-object" src="http://placehold.it/64x64">
+	  </a>
+	  <div class="media-body">
+	    <h4 class="media-heading">1-2-3 Sing With Me</h4>
+		<p>Aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+		<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	  </div>
+	</div>
+		
 </div>
-{% endif %}
 
 {% endblock %}
