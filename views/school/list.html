@@ -1,0 +1,39 @@
+{% extends 'layouts/layout.html' %}
+
+{% block title %}
+{% if field %}Music {% endif %}Schools{% if location %} in and around Coogee{% endif %}
+{% endblock %}
+
+{% block pagecontent %}
+<div class="container">
+<div class="page-header">
+  <h1>{% if field %}Music {% endif %}Schools{% if location %} near Coogee{% endif %}</h1>
+</div>
+
+{% if schools %}
+<ul class="thumbnails">
+{% for school in schools %}
+	<li class="span2">
+	  	  <a href="/{{school.webname}}" class="thumbnail">
+			  <img src="http://placehold.it/130x65/523575&text=School+Image" alt="">
+			  <h4>{{school.name}}</h4>
+			  {{school.catchphrase}}
+		</a>
+	</li>
+{% endfor %}
+
+{% for school in schools %}
+	<li class="span2">
+	  	  <a href="/{{school.webname}}" class="thumbnail">
+			  <img src="http://placehold.it/130x65/523575&text=School+Image" alt="">
+			  <h4>{{school.name}}</h4>
+			  {{school.catchphrase}}
+		</a>
+	</li>
+{% endfor %}
+
+</ul>
+{% endif %}
+ 
+</div>
+{% endblock %}

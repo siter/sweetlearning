@@ -1,0 +1,79 @@
+{% extends 'layouts/layout.html' %}
+
+{% block title %}{{ school.name }} - School Information{% endblock %}
+
+{% block pagecontent %}
+<div class="container">
+	<div class="page-header">
+		<div class="row">
+			<div class="span10">
+				<h1>{{ school.name }} {#% if school.catchphrase %}<small>{{ school.catchphrase }}</small>{% endif %#}</h1>
+			</div>
+			<div class="span2 right">
+				<a href="#follow" class="btn btn-info btn-large">Follow <i class="icon-eye-open icon-white"></i></a>
+				<!-- Following <a href="#unfollow" class="btn btn-mini hidden">Unfollow</a> -->
+			</div>
+	</div>
+
+	<div class="row">
+		<div class="span8 main">
+			{% if school.summary %}
+			<p class="lead">{{ school.summary }}</p>
+			{% endif %}
+
+			{% if school.description %}
+			<p>
+				{% autoescape false %}
+				{{ school.description }}
+				{% endautoescape %}
+			</p>
+			{% endif %}	
+			
+			{% if school.text_sections %}
+			<h2>Sections {{ school.text_sections|length }}</h2>
+			<hr />
+			{% for section in school.text_sections %}
+			<h2>{{ section.title }}</h2>
+			<p>{{ section.text }}</p>
+			{% endfor %}
+
+			{% endif %}	
+			
+		</div>
+		
+		
+		<div class="span4 sidebar">
+			<p>
+  	      	<img src="http://placehold.it/300x120/ffeedd/000000&text=School+Graphic" alt="" />
+			</p>
+			
+			{% if school.contact %}
+			<!-- <h2>School Contact Info</h2> -->
+			<!-- Contact Info -->
+			<ul class="nav nav-pills nav-stacked">
+				{% if school.contact.phone %}
+					<li class="phone lead"><a href="tel: {{ school.contact.phone }}"><b>{{ school.contact.phone }}</b></a></li>
+				{% endif %}
+				{% if school.contact.www %}
+					<li class="www"><a href="http://{{ school.contact.www }}"><b>{{school.contact.www}}</b></a></li>
+				{% endif %}
+				{% if school.contact.fb %}
+					<li><a href="{{ school.contact.fb }}">Facebook</a></li>
+				{% endif %}
+				{% if school.contact.fb %}
+					<li><a href="{{ school.contact.fb }}">Facebook</a></li>
+				{% endif %}
+			</ul>
+			{% endif %}
+			<!-- <h2>Downloads</h2>
+			<ul class="nav nav-pills nav-stacked">
+				<li><a href="#">Application Form</a></li>
+				<li><a href="#">Direct Debit Form</a></li>
+				<li><a href="#">General Information Booklet</a></li>
+			</ul> -->
+			<p>
+			</p>
+		</div>
+	</div>
+</div>
+{% endblock %}

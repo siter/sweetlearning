@@ -4,41 +4,39 @@
  */
 
 var express 	= require('express')
-  , routes 		= require('./routes')
   , http 		= require('http')
   , path 		= require('path')
   ,	cons 		= require('consolidate')
-  , swig 		= require('swig')
-  
+  , swig 		= require('swig')  
   , passport 	= require('passport')
   , fb_strategy	= require('passport-facebook').Strategy;
   
-var mongoose	= require('mongoose'),
-	Schema 		= mongoose.Schema,
-	ObjectId 	= Schema.ObjectId;
+var mongoose	= require('mongoose');
 
 var mongoose_options = { db: { safe: true }}
-mongoose.connect('mongodb://localhost/sl_test', mongoose_options);
+mongoose.connect(process.env.MONGODB_URI, mongoose_options);
 
-var db =  mongoose.connection;
-
-//
-// Mongoose SCHEMAS
-//
-var User = mongoose.Schema({
-	
-});
+// Mongoose Models
+var Member = require('./models/member.js');
+var School = require('./models/school.js');
 
 var users = {};
+
+var app_url = process.env.APP_URL;
+if (process.env.PORT) {
+	app_url += ":"+process.env.PORT;
+}
 
 passport.use(new fb_strategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: "http://d.sweetlearning.com.au:3000/auth/facebook/callback"
+    callbackURL: app_url+"/auth/facebook/callback"
   },
   
   function(accessToken, refreshToken, profile, done) {	  
 	  var userprofile = {};
+	  
+	  // TODO: convert to mongo store
 	  
 	  if (users['fb_'+profile.id]) {
 		  
@@ -96,7 +94,10 @@ app.configure(function(){
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.cookieParser(process.env.SECRET));
-	app.use(express.session());
+	app.use(express.session({
+		key: "_.slsid",
+		cookie: {maxAge: 99999999999}
+	}));
 
     app.use(passport.initialize());
     app.use(passport.session());
@@ -118,106 +119,207 @@ app.configure('development', function(){
 });
 
 //// routes
-app.get('/auth/facebook', passport.authenticate('facebook'));
-
-app.get('/auth/facebook/callback', 
-  passport.authenticate('facebook', { successRedirect: '/',
-                                      failureRedirect: '/login' }));
 
 
-
-// require auth
+// member area
 app.get('/me', restricted, load_member_schools, function(req, res){
-	res.render('me');
+	res.render('member/self');
 });
 
-app.get('/me/edit', restricted, function(req, res){
-	res.render('me');
+app.get('/me/edit', UNrestricted, function(req, res){
+	res.render('member/self');
 });
 
 
 // public
-app.get('/', function(req, res){
-	if (req.user) {
-		res.redirect('/me'); return;
-		res.render('memberhome');
-	} else {
-		res.render('home');			
-	}
+app.get('/', restricted_home, function(req, res){
+	res.render('memberhome');
 });
 
-app.get('/about', function(req,res){
-	res.render('about');
+// infopages
+// public home page
+app.get('/info/welcome', function(req, res){
+	res.render('infopages/welcome');	
 });
 
-app.get('/contact', function(req,res){
-	res.render('contact');
+app.get('/info', function(req, res){
+	res.render('infopages/info');
 });
 
-app.get('/privacy', function(req,res){
-	res.render('privacy');
+app.get('/info/about', function(req,res){
+	res.render('infopages/about');
 });
+
+app.get('/info/contact', function(req,res){
+	res.render('infopages/contact');
+});
+
+app.get('/info/privacy', function(req,res){
+	res.render('infopages/privacy');
+});
+
+
+
+// search
 
 app.get('/search', function(req, res){
 	res.locals.q = req.query["q"];
 	res.render('search');	
 });
 
-app.get('/member/:memberid', routes.member);
 
-// dummy login function
-app.get('/login', function(req, res){
-	res.render('login');
+
+//// AUTH
+app.get('/auth/login', public_only, function(req, res){
+	res.render('auth/login');
 });
 
-app.post('/login', function(req, res){
-	var member = members._123;
-	
-    req.session.regenerate(function(){
-      	req.session.member = member;
-		res.locals.member = req.session.member;		
-		res.render('login');
-    });
-});
-
-app.get('/register', function(req, res){
-
-	
-});
-
-
-app.get('/logout', function(req, res){
+app.get('/auth/logout', function(req, res){
 	req.logOut();
   	req.session.destroy(function(){
     	res.redirect('/');
   	});
 });
 
-app.get('/schools/:school_webname', function(req, res){
-	res.render('one_school');
-});
+app.get('/auth/facebook', passport.authenticate('facebook'));
 
+app.get('/auth/facebook/callback', 
+  passport.authenticate('facebook', { successRedirect: '/',
+                                      failureRedirect: '/auth/login' }));
+
+
+//// schools
 app.get('/schools', function(req, res){
-	res.render('schools', {schools:schools});
+	res.render('school/list', {schools:schools});
 });
 
-app.get('/info', function(req, res){
-	res.render('info');
+app.get('/schools/coogee', function(req, res){
+	res.render('school/list', {schools:schools});
+});
+
+app.get('/schools/coogee/music', function(req, res){
+	var data = {
+		"schools": schools,
+		"location": "Coogee",
+		"field": "Music"
+	}
+	res.render('school/list', data);
+});
+
+// add 
+app.get('/schools//add', UNrestricted, function(req, res){
+	res.render('school/add');
+});
+
+app.post('/schools//add', UNrestricted, function(req, res){
+	
+	var school = new School(req.body.school);
+	
+	ddd(school);
+	ddd(school.name);
+	
+	
+	// validate data
+	
+	// if bad or empty data
+	res.render('school/add', {"school":school});	
+	
+	// save school
+	school.save(function (err) {
+        if(err) {throw err;}
+		
+		done(null, school);
+
+		// school.save() // success
+	});
+
+	// redirect to school edit step (by id)
+	res.redirect('school//edit/'+school.id)
+	
+	// if bad t
+	
+
+});
+
+
+// single school
+app.get('/:school_webname', function(req, res){
+	res.render('school/show');
 });
 
 
 
 //// functions
 
+//// params
+
+app.param('memberid', function(req, res, next, id){
+	if (id == 123) {
+	    req.member = members._123;		
+	    next();
+	} else {
+      	next(new Error('member unknown'));		
+	}
+});
+
+app.param('school_webname', function(req, res, next, webname){
+	
+	// load school
+	School.findOne({'webname': webname}, function(err, school){
+		if (err) {
+			next(new Error('school unknown'));
+			return;
+		}
+
+		ddd(school);
+		
+		res.locals.school = school;
+		next();
+	});
+	// save to request locals for use in templage
+	
+	// if (schools[webname]) {
+	// 	res.locals.school = schools[webname];
+	//     next();
+	// } else {
+	//       	next(new Error('school unknown'));		
+	// }
+});
+
+
+
 // middleware
 
 function restricted(req, res, next) {
+	if (req.isAuthenticated()) {
+		next();
+	} else {
+		// TODO: Capture location for redirect after login
+		
+		req.session.error = 'Access denied!';
+		res.redirect('/auth/login');
+	}
+}
+
+function restricted_home(req, res, next) {
   if (req.isAuthenticated()) {
     next();
   } else {
-    req.session.error = 'Access denied!';
-    res.redirect('/login');
+    res.redirect('/info/welcome');
   }
+}
+
+function public_only(req, res, next) {
+  if (req.isAuthenticated()) {
+      res.redirect('/');
+  } else {
+      next();
+  }
+}
+
+// dummy development function to allow for bypassing logins for template work
+function UNrestricted(req, res, next) {
+	next();
 }
 
 function load_member(req, res, next){
@@ -238,27 +340,10 @@ function load_member_schools(req, res, next){
 }
 
 
-//// params
 
-app.param('memberid', function(req, res, next, id){
-	if (id == 123) {
-	    req.member = members._123;		
-	    next();
-	} else {
-      	next(new Error('member unknown'));		
-	}
-});
 
-app.param('school_webname', function(req, res, next, webname){
-	if (schools[webname]) {
-		res.locals.school = schools[webname];
-	    next();
-	} else {
-      	next(new Error('school unknown'));		
-	}
-});
 
-////
+//// TEMP DATA
 
 var members = {
 	_123: {"id":123, "name":"Graham Green"}
@@ -333,5 +418,5 @@ function ddd(obj) {
 ////
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Sweet Learning listening on port " + app.get('port'));
+  console.log("Sweet Learning listening on " + app_url);
 });
