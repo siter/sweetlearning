@@ -3,31 +3,36 @@
 {% block pagecontent %}
 
 <div class="container">
-<div class="page-header">
-	<div class="row">
+<div class="row">
 		
-		<div class="span8">
-		    <h1><small>Your profile:</small> {{ user.displayName }} </h1>
+	<div class="span3">
+		{% if member.facebook %}
+		<img src="http://graph.facebook.com/{{ member.facebook.profile._json.id }}/picture?width=200&height=200"  class="img-polaroid" /><br />
+		{% endif %}
+		<br />
+		<ul class="nav nav-list">
+		  <li><i class="icon-map-marker"></i> Coogee, NSW</li>
+		  <li><a href="mailto:{{ member.email }}"><i class="icon-envelope"></i> {{ member.email }}</a></li>
+		  <li><a href="http://andrei.md"><i class="icon-globe"></i> andrei.md</a></li>
+		  <li><a href="http://twitter.com/andrei_md"><i class="icon-hand-right"></i> @andrei_md</a></li>
+		  <li><a href="{{ member.facebook.profile._json.link }}"><i class="icon-hand-right"></i> Facebook profile</a></li>
+		  <li><i class="icon-time"></i> Joined: {{ member.created | date("M j, Y", "+11") }}</li>
+		</ul>
+	</div>
+	<div class="span9">
+		<div class="row">
+			<div class="span6">
+				<h1>{{ member.name.display }}</h1>
+			</div>
+			<div class="span3 right">
+				<a class="btn btn-inverse" href="/me/edit">Update Details</a>
+			</div>
 		</div>
-		<div class="span4 right">
-			<a class="btn btn-small" href="/me/edit">Update My Details</a>
-		</div>
-	</div>	
-</div>
-
-<a class="btn" href="/schoo//add">Add School</a>
+		<p class="lead">A little bit about me. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+		<hr>
+	</div>
+</div>	
 
 </div>
-
-{% if schools %}
-<div class="container">
-  <h2>Your schools</h2>
-  <ul>
-  {% for school in schools %}
-      <li><a href="/schools/{{ school.webname }}">{{ school.name }}</a></li>
-  {% endfor %}
-  </ul>
-</div>
-{% endif %}
 
 {% endblock %}

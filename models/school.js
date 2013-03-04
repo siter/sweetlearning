@@ -21,7 +21,7 @@ var School = new Schema({
 	contact: {
 		www: String,
 		phone: String,
-		email: { type: String, required: true, lowercase: true, index: { unique: true, sparse: true } }
+		email: { type: String, lowercase: true, index: { unique: true, sparse: true } }
 	},
 	location: {
 		street: String,

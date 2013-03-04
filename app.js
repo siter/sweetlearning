@@ -11,10 +11,16 @@ var express 	= require('express')
   , passport 	= require('passport')
   , fb_strategy	= require('passport-facebook').Strategy;
   
+ 
+var RedisStore = require('connect-redis')(express);
+
+ 
 var mongoose	= require('mongoose');
 
 var mongoose_options = { db: { safe: true }}
 mongoose.connect(process.env.MONGODB_URI, mongoose_options);
+// TODO: check mongoose connection. only start server on success
+
 
 // Mongoose Models
 var Member = require('./models/member.js');
@@ -28,51 +34,52 @@ if (process.env.PORT) {
 }
 
 passport.use(new fb_strategy({
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: app_url+"/auth/facebook/callback"
-  },
+		clientID: process.env.FACEBOOK_APP_ID,
+		clientSecret: process.env.FACEBOOK_SECRET,
+		callbackURL: app_url+"/auth/facebook/callback"
+	},
   
-  function(accessToken, refreshToken, profile, done) {	  
-	  var userprofile = {};
+	function(accessToken, refreshToken, profile, done) {
+		// ddd(profile);
+		
+		Member.findOne({'facebook.id':profile.id}, function(err, member){
+			
+			// member not found
+			if (member) {
+				member.facebook.profile = profile._json;
+				member.save();
+				member.save(function(err, member){
+					done(null, member);
+				});
+			} else {
+				var member = new Member();
+				member.facebook.id = profile.id;
+				member.facebook.profile = profile._json;
+				member.email = profile.emails[0].value;
+				member.name.first = profile.name.givenName; 
+				member.name.last = profile.name.familyName;
+				
+				member.save(function(err, member){
+					if (err) {return done(err)}
+					done(null, member);
+				});
+			}
+			
+		});
 	  
-	  // TODO: convert to mongo store
-	  
-	  if (users['fb_'+profile.id]) {
-		  
-		  userprofile = users['fb_'+profile.id];
-		  
-	  } else {
-		  var now = new Date();
-		  
-		  userprofile = profile;
-
-		  userprofile['fb_access_token'] = accessToken;
-		  userprofile['fb_refresh_token'] = refreshToken;
-		  userprofile['created'] = now.toJSON;
-		  userprofile['uid'] = 'fb_'+profile.id;
-		  
-		  users['fb_'+profile.id] = userprofile;
-	  }
-	  	  
-	  return done(null, userprofile);
-  }
+	}
 ));
 
-passport.serializeUser(function(user, done) {
-	done(null, user.uid);
+passport.serializeUser(function(member, done) {
+	done(null, member.id);
 });
 
 passport.deserializeUser(function(id, done) {
-	var userprofile = users[id];
-	if (userprofile) {
-		done(null, userprofile);
-	} else {
-		done(null, false);
-	}
+	Member.findById(id, function (err, member) {
+		if (err) { done(null, false); }
+		done(null, member);
+	});
 });
-
-
 
 var app = express();
 
@@ -93,9 +100,11 @@ app.configure(function(){
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
+	
 	app.use(express.cookieParser(process.env.SECRET));
 	app.use(express.session({
-		key: "_.slsid",
+		store: new RedisStore,
+		key: "_.sid",
 		cookie: {maxAge: 99999999999}
 	}));
 
@@ -115,18 +124,18 @@ app.configure(function(){
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 });
 
 //// routes
 
 
 // member area
-app.get('/me', restricted, load_member_schools, function(req, res){
+app.get('/me', restricted, function(req, res){
 	res.render('member/self');
 });
 
-app.get('/me/edit', UNrestricted, function(req, res){
+app.get('/me/edit', restricted, function(req, res){
 	res.render('member/self');
 });
 
@@ -135,38 +144,6 @@ app.get('/me/edit', UNrestricted, function(req, res){
 app.get('/', restricted_home, function(req, res){
 	res.render('memberhome');
 });
-
-// infopages
-// public home page
-app.get('/info/welcome', function(req, res){
-	res.render('infopages/welcome');	
-});
-
-app.get('/info', function(req, res){
-	res.render('infopages/info');
-});
-
-app.get('/info/about', function(req,res){
-	res.render('infopages/about');
-});
-
-app.get('/info/contact', function(req,res){
-	res.render('infopages/contact');
-});
-
-app.get('/info/privacy', function(req,res){
-	res.render('infopages/privacy');
-});
-
-
-
-// search
-
-app.get('/search', function(req, res){
-	res.locals.q = req.query["q"];
-	res.render('search');	
-});
-
 
 
 //// AUTH
@@ -207,37 +184,28 @@ app.get('/schools/coogee/music', function(req, res){
 });
 
 // add 
-app.get('/schools//add', UNrestricted, function(req, res){
+app.get('/schools//add', restricted, function(req, res){
 	res.render('school/add');
 });
 
-app.post('/schools//add', UNrestricted, function(req, res){
+app.post('/schools//add', restricted, function(req, res){
 	
 	var school = new School(req.body.school);
+	school.webname = school.id;
 	
-	ddd(school);
-	ddd(school.name);
-	
-	
-	// validate data
-	
-	// if bad or empty data
-	res.render('school/add', {"school":school});	
+	// TODO: validate data
 	
 	// save school
-	school.save(function (err) {
-        if(err) {throw err;}
-		
-		done(null, school);
-
+	school.save(function (err, school) {
+        if(err) {
+			// save error message for presenting on screen
+			
+			res.render('school/add', {"school":school});	
+		} else {
+			res.redirect('school//edit/'+school.id)
+		}
 		// school.save() // success
 	});
-
-	// redirect to school edit step (by id)
-	res.redirect('school//edit/'+school.id)
-	
-	// if bad t
-	
 
 });
 
@@ -248,42 +216,56 @@ app.get('/:school_webname', function(req, res){
 });
 
 
+// infopages
+// public home page
+app.get('/info/welcome', function(req, res){
+	res.render('infopages/welcome');	
+});
+
+app.get('/info', function(req, res){
+	res.render('infopages/info');
+});
+
+app.get('/info/about', function(req,res){
+	res.render('infopages/about');
+});
+
+app.get('/info/contact', function(req,res){
+	res.render('infopages/contact');
+});
+
+app.get('/info/privacy', function(req,res){
+	res.render('infopages/privacy');
+});
+
+
+
+// search
+
+app.get('/search', function(req, res){
+	res.locals.q = req.query["q"];
+	res.render('search');	
+});
+
+
+
+
+
 
 //// functions
 
 //// params
-
-app.param('memberid', function(req, res, next, id){
-	if (id == 123) {
-	    req.member = members._123;		
-	    next();
-	} else {
-      	next(new Error('member unknown'));		
-	}
-});
-
 app.param('school_webname', function(req, res, next, webname){
 	
 	// load school
 	School.findOne({'webname': webname}, function(err, school){
 		if (err) {
-			next(new Error('school unknown'));
-			return;
+			return next(new Error('school unknown'));
 		}
-
-		ddd(school);
 		
 		res.locals.school = school;
 		next();
 	});
-	// save to request locals for use in templage
-	
-	// if (schools[webname]) {
-	// 	res.locals.school = schools[webname];
-	//     next();
-	// } else {
-	//       	next(new Error('school unknown'));		
-	// }
 });
 
 
@@ -324,34 +306,12 @@ function UNrestricted(req, res, next) {
 
 function load_member(req, res, next){
 	if (req.user) {
-//		ddd(req.user);
-		res.locals.user = req.user;	
+		res.locals.member = req.user;	
 	}
   	next();
 }
 
-function load_member_schools(req, res, next){
-	res.locals.schools = [];
-	for (var i = member_schools[req.user.uid].length - 1; i >= 0; i--){
-		var sid = member_schools[req.user.uid][i];
-		res.locals.schools.push({webname:sid,"name":schools[sid].name})
-	};
-	next();
-}
-
-
-
-
-
 //// TEMP DATA
-
-var members = {
-	_123: {"id":123, "name":"Graham Green"}
-};
-
-var member_schools = {
-	'fb_536852454': ['123singwithme', 'sydney_jazz']
-}
 
 var schools = {
 	"123singwithme": {

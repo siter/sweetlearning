@@ -1,28 +1,33 @@
 {
-  "name": "sweetlearning",
-  "author": "Andrei Railean",
-  "description": "Learning provider directory"
-  "version": "0.1.0",
-  "private": true,
-  
-  "scripts": {
-    "start": "node app"
-  },
+	"name": "sweetlearning",
+	"author": "Andrei Railean",
+	"description": "Learning provider directory",
+	"version": "0.1.0",
+	"private": true,
 
-  "dependencies": {
-    "express": "3.1.0",
-    "consolidate": "0.8.0",
-	"swig": "0.13.5",
-	"mongoose": "3.5.7",
+	"scripts": {
+		"start": "node app"
+	},
 
-	"passport": "0.1.15",
-	"passport-local": "0.1.6",
-	"passport-facebook": "0.1.4"
-	
-  },
+	"dependencies": {
+		"express": "3.1.0",
+		"consolidate": "0.8.0",
+		"swig": "0.13.5",
+		"mongoose": "3.5.7",
+		"connect-redis": "1.4.5",
+		"hiredis": "0.1.14",
 
-  "engines": {
-    "node": "0.8.20"
-  }
+		"passport": "0.1.15",
+		"passport-local": "0.1.6",
+		"passport-facebook": "0.1.4"
+	},
+
+	"devDependencies": {
+		"vows":"0.7.0"
+	},
+
+	"engines": {
+		"node": "0.8.20"
+	}
 
 }

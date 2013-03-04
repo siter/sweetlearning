@@ -24,18 +24,18 @@
 				</div>
 				<div class="span4 right">
 					<div class="btn-group left">
-						{% if user %}
+						{% if member %}
 						<!-- <a class="btn" href="/me"></a> -->
 						<a class="btn" href="/me">
-							{{ user.displayName }}
+							{{ member.name.display }}
 						</a>
 					    <button class="btn dropdown-toggle" data-toggle="dropdown">
 					      <span class="caret"></span>
 					    </button>
 						<ul class="dropdown-menu" role="menu">
 							<li><a tabindex="-1" href="/me"><i class="icon-user"></i> My Profile</a></li>
-							<li><a tabindex="-1" href="/me/edit"><i class="icon-edit"></i> Edit Profile</a></li>
-							<li><a tabindex="-1" href="/schools//add"><i class="icon-plus-sign"></i> Add New School</a></li>
+							<li class="divider"></li>
+							<li><a tabindex="-1" href="/info/help"><i class="icon-question-sign"></i> Site Help</a></li>
 							<li class="divider"></li>
 							<li><a tabindex="-1" href="/auth/logout"><i class="icon-off"></i> Log Out</a></li>
 						</ul>

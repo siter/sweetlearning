@@ -30,8 +30,6 @@
 			{% endif %}	
 			
 			{% if school.text_sections %}
-			<h2>Sections {{ school.text_sections|length }}</h2>
-			<hr />
 			{% for section in school.text_sections %}
 			<h2>{{ section.title }}</h2>
 			<p>{{ section.text }}</p>

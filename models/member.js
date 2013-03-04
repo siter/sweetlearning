@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	ObjectId = Schema.Types.ObjectId;
 
-var Member = new Schema({
+var MemberSchema = new Schema({
 	name: {
 		first: String,
 		last: String
@@ -14,4 +14,13 @@ var Member = new Schema({
 	}
 });
 
-module.exports = mongoose.model('Member', Member);
+MemberSchema.virtual('name.display').get(function() {
+	return this.name.first + ' ' + this.name.last;
+});
+
+MemberSchema.virtual('created').get(function() {
+	return this._id.getTimestamp();
+});
+
+
+module.exports = mongoose.model('Member', MemberSchema);
