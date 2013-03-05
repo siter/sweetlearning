@@ -11,6 +11,10 @@ var MemberSchema = new Schema({
 	facebook: {
 		id: { type: String, lowercase: true, index: { unique: true, sparse: true } },
 		profile: Schema.Types.Mixed
+	},
+	location: {
+		text: String,
+		suburb: String
 	}
 });
 

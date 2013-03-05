@@ -136,7 +136,7 @@ app.get('/me', restricted, function(req, res){
 });
 
 app.get('/me/edit', restricted, function(req, res){
-	res.render('member/self');
+	res.render('member/edit');
 });
 
 
