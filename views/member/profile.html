@@ -1,0 +1,44 @@
+{% extends 'layouts/layout.html' %}
+
+{% block title %}Profile of {{ profile.name.display }}{% endblock %}
+
+{% block pagecontent %}
+
+<div class="container">
+<div class="row">
+		
+	<div class="span3">
+		{% if member.facebook %}
+		<img src="http://graph.facebook.com/{{ profile.facebook.profile.id }}/picture?width=200&height=200"  class="img-polaroid" /><br />
+		{% endif %}
+		<br />
+		<ul class="nav nav-list">
+		  {% if profile.location %}
+		  <li><i class="icon-map-marker"></i> {{ profile.location }}</li>
+		  {% endif %}
+		  {% if profile.website %}
+		  <li><a href="http://{{ profile.website }}"><i class="icon-globe"></i> {{ profile.website }}</a></li>
+		  {% endif %}
+		  <li><a href="{{ profile.facebook.profile.link }}"><i class="icon-hand-right"></i> Facebook profile</a></li>
+		  <li><i class="icon-time"></i> Joined: {{ profile.created | date("M j, Y", "+11") }}</li>
+		</ul>
+	</div>
+	<div class="span9">
+		<div class="row">
+			<div class="span6">
+				<h1>{{ profile.name.display }}</h1>
+			</div>
+			<div class="span3 right">
+				{% if profile.id == member.id %}
+				<a class="btn btn-inverse" href="/settings"><i class="icon-pencil icon-white"></i> Update Details</a>
+				{% endif %}
+			</div>
+		</div>
+		<p class="lead">{{ profile.bio }}</p>
+		<hr>
+	</div>
+</div>	
+
+</div>
+
+{% endblock %}

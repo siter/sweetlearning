@@ -7,15 +7,22 @@ var MemberSchema = new Schema({
 		first: String,
 		last: String
 	},
-	email: { type: String, required: true, lowercase: true, index: { unique: true, sparse: true } },
+	
+	phone: String,
+	email: String,
+	location: String,
+	website: String,
+	
+	bio: String,
+	
 	facebook: {
 		id: { type: String, lowercase: true, index: { unique: true, sparse: true } },
+		token: {
+			access: String,
+			refresh: String
+		},
 		profile: Schema.Types.Mixed
 	},
-	location: {
-		text: String,
-		suburb: String
-	}
 });
 
 MemberSchema.virtual('name.display').get(function() {

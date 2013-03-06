@@ -2,7 +2,7 @@
 	"name": "sweetlearning",
 	"author": "Andrei Railean",
 	"description": "Learning provider directory",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"private": true,
 
 	"scripts": {
@@ -10,14 +10,15 @@
 	},
 
 	"dependencies": {
-		"express": "3.1.0",
+		"underscore": "1.4.x",
+		"express": "3.1.x",
 		"consolidate": "0.8.0",
 		"swig": "0.13.5",
-		"mongoose": "3.5.7",
-		"connect-redis": "1.4.5",
+		"mongoose": "3.5.x",
+		"connect-redis": "1.4.x",
 		"hiredis": "0.1.14",
 
-		"passport": "0.1.15",
+		"passport": "0.1.16",
 		"passport-local": "0.1.6",
 		"passport-facebook": "0.1.4"
 	},

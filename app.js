@@ -44,10 +44,10 @@ passport.use(new fb_strategy({
 		
 		Member.findOne({'facebook.id':profile.id}, function(err, member){
 			
-			// member not found
 			if (member) {
 				member.facebook.profile = profile._json;
-				member.save();
+				member.facebook.token.access = accessToken;
+				member.facebook.token.refresh = refreshToken;
 				member.save(function(err, member){
 					done(null, member);
 				});
@@ -55,6 +55,8 @@ passport.use(new fb_strategy({
 				var member = new Member();
 				member.facebook.id = profile.id;
 				member.facebook.profile = profile._json;
+				member.facebook.token.access = accessToken;
+				member.facebook.token.refresh = refreshToken;
 				member.email = profile.emails[0].value;
 				member.name.first = profile.name.givenName; 
 				member.name.last = profile.name.familyName;
@@ -129,14 +131,50 @@ app.configure('development', function(){
 
 //// routes
 
-
-// member area
-app.get('/me', restricted, function(req, res){
-	res.render('member/self');
+// member profile
+app.get('/me/:memberid', function(req, res){
+	var memberid = req.params.memberid;
+	Member.findById(memberid, function (err, member_profile) {
+		if (err) { 
+		    res.status(404);
+		    res.render('errors/404');
+		} else {
+			res.render('member/profile', {profile:member_profile});			
+		}
+	});
 });
 
-app.get('/me/edit', restricted, function(req, res){
-	res.render('member/edit');
+
+// member settings
+app.get('/me', restricted, function(req, res){
+	res.render('member/profile', {profile:req.user});
+});
+
+app.get('/settings', restricted, function(req, res){
+	res.render('member/settings', {settings:req.user});
+});
+
+app.post('/settings', restricted, function(req, res){
+	var me = req.user;
+	var new_data = req.body.settings;
+
+	ddd(me);
+	ddd(new_data);
+	
+	me.name = new_data.name;
+	me.website = new_data.website;
+	me.location = new_data.location;
+	me.bio = new_data.bio;
+	me.email = new_data.email;
+
+	me.save(function(err,member){
+		if (err) {
+			res.render('member/settings', {settings:new_data});
+		} else {
+			res.render('member/settings', {settings:req.user});
+		}
+	})
+
 });
 
 
