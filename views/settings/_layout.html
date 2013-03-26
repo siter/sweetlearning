@@ -1,0 +1,32 @@
+{% extends 'layouts/layout.html' %}
+
+{% block title %}Edit Settings{% endblock %}
+
+{% set sections = [
+	{key:'info',name:'Personal Info'}, 
+	{key:'schools',name:'Schools You Manage'}
+] %}
+
+{% block pagecontent %}
+<div class="container">
+
+	<div class="row">
+		<div class="span3" >
+			<div class="well" style="padding: 8px 0">
+			<ul class="nav nav-list">
+	  		  <li class="nav-header">{{ member.name.display }}</li>
+			  {% for s in sections %}
+			  <li {% if settings_section == s.key %} class="active"{% endif %}><a href="/settings/{{ s.key }}">{% if settings_section == s.key %}<i class="icon-chevron-right"></i>{% endif %} {{ s.name }}</a></li>
+			  {% endfor %}
+			  <li class="divider"></li>
+			  <li ><a href="/me" class=""><i class="icon-chevron-left"></i> Back to Profile</a></li>
+			</ul>
+			</div>
+		</div>
+		<div class="span9">
+			{% block settingscontent %}{% endblock %}
+		</div>
+	</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if alerts %}
+<div class="container">
+{% for a in alerts %}
+<div class="alert alert-{{a.type}}"><button type="button" class="close" data-dismiss="alert">&times;</button>{{ a.message }}</div>
+{% endfor %}
+</div>
+{% endif %}

@@ -1,0 +1,20 @@
+{% extends 'settings/_layout.html' %}
+
+{% block settingscontent %}
+	<h1>Schools You Manage</h1>
+	
+	{% if my_schools %}
+	<table class="table table-striped">
+		{% for school in my_schools %}
+		<tr>
+			<td><a href="{{ school.urlpath }}">{{ school.name}}</a></td>
+			<td><a href="{{ school.settings_urlpath }}">Settings</a></td>
+		</tr> 
+		{% endfor %}
+	</table>
+	{% endif %}
+	<p>
+	<a href="/settings/schools/add" class="btn btn-">Start a School</a>
+	</p>
+
+{% endblock %}
