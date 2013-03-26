@@ -2,39 +2,38 @@ var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
 	ObjectId = Schema.Types.ObjectId;
 
-var TextSection = new Schema({
-	title: { type: String, required: true},
-	text: { type: String, required: true}
+var SchoolSchema = new Schema({
+	name: { type: String, trim: true, required: true },
+	webname: { type: String, trim: true, required: true, lowercase: true, index: { unique: true, sparse: true } },
+	
+	summary: { type: String, trim: true },
+	
+	description: { type: String, trim: true },
+	description_md: String,	
+	
+	location: String,
+	www: String,
+	phone: String,
+	email: { type: String, lowercase: true},
+	email_validated: { type: Boolean, default: false },
+		
+	_creator: { type: ObjectId, ref: 'Member' },
+	admins: [{ type: ObjectId, ref: 'Member'}]
 });
 
-var WebLink = new Schema({
-	url: {type: String, required: true},
-	title: String
+SchoolSchema.path('admins').index(true);
+
+
+SchoolSchema.virtual('urlpath').get(function() {
+	return '/' + this.webname;
 });
 
-var School = new Schema({
-	name: { type: String, trim: true },
-	webname: { type: String, required: true, lowercase: true, index: { unique: true, sparse: true } },
-	quickintro: String,
-	description: String,
-	summary: String,
-	contact: {
-		www: String,
-		phone: String,
-		email: { type: String, lowercase: true, index: { unique: true, sparse: true } }
-	},
-	location: {
-		street: String,
-		suburb: String,
-		postcode: String,
-		state: String,
-		country: {type: String, default: "Australia"}
-	},
-	text_sections: [TextSection],
-	links: [WebLink],
-	managers: [ObjectId],
-	created: { type: Date, default: Date.now },
-	lastupdate: { type: Date, default: Date.now }
+SchoolSchema.virtual('settings_urlpath').get(function() {
+	return '/settings/schools/edit/' + this.webname;
 });
 
-module.exports = mongoose.model('School', School);
+SchoolSchema.virtual('created').get(function() {
+	return this._id.getTimestamp();
+});
+
+module.exports = mongoose.model('School', SchoolSchema);

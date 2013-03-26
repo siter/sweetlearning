@@ -17,17 +17,7 @@
 	  	  <a href="/{{school.webname}}" class="thumbnail">
 			  <img src="http://placehold.it/130x65/523575&text=School+Image" alt="">
 			  <h4>{{school.name}}</h4>
-			  {{school.catchphrase}}
-		</a>
-	</li>
-{% endfor %}
-
-{% for school in schools %}
-	<li class="span2">
-	  	  <a href="/{{school.webname}}" class="thumbnail">
-			  <img src="http://placehold.it/130x65/523575&text=School+Image" alt="">
-			  <h4>{{school.name}}</h4>
-			  {{school.catchphrase}}
+			  {{school.summary}}
 		</a>
 	</li>
 {% endfor %}

@@ -1,37 +1,30 @@
+var fs 		= require('fs');
+var _  		= require('underscore');
+var http 	= require('http');
+var path 	= require('path');
 
-/**
- * Module dependencies.
- */
 
-var express 	= require('express')
-  , http 		= require('http')
-  , path 		= require('path')
-  ,	cons 		= require('consolidate')
-  , swig 		= require('swig')  
-  , passport 	= require('passport')
-  , fb_strategy	= require('passport-facebook').Strategy;
-  
- 
-var RedisStore = require('connect-redis')(express);
-
- 
-var mongoose	= require('mongoose');
+// Mongoose Config
+var mongoose = require('mongoose');
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var mongoose_options = { db: { safe: true }}
 mongoose.connect(process.env.MONGODB_URI, mongoose_options);
 // TODO: check mongoose connection. only start server on success
 
-
-// Mongoose Models
+// Prepare Models
 var Member = require('./models/member.js');
 var School = require('./models/school.js');
 
-var users = {};
 
 var app_url = process.env.APP_URL;
 if (process.env.PORT) {
 	app_url += ":"+process.env.PORT;
 }
+
+// Passport AUTH
+var passport 	= require('passport');
+var fb_strategy	= require('passport-facebook').Strategy;
 
 passport.use(new fb_strategy({
 		clientID: process.env.FACEBOOK_APP_ID,
@@ -83,13 +76,23 @@ passport.deserializeUser(function(id, done) {
 	});
 });
 
+
+// EXPRESS
+var express = require('express'),
+	cons	= require('consolidate'),
+	swig	= require('swig');
+	
 var app = express();
+// Sessions
+var RedisStore = require('connect-redis')(express);
+
 
 swig.init({
     root: __dirname + '/views',
     allowErrors: true, // allows errors to be thrown and caught by express instead of suppressed
 	cache: false //TODO: disable for production
 });
+
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
@@ -107,16 +110,19 @@ app.configure(function(){
 	app.use(express.session({
 		store: new RedisStore,
 		key: "_.sid",
-		cookie: {maxAge: 99999999999}
+		cookie: {maxAge: 32000000}
 	}));
-
+	
     app.use(passport.initialize());
     app.use(passport.session());
 
 	app.use(load_member);
+	app.use(session_alerts);
+	
+	app.use(express.csrf());
+	app.use(load_csrf_token);
 
 	app.use(app.router);
-
 
 	// 404 catch-all
 	app.use(function(req,res){
@@ -128,6 +134,12 @@ app.configure(function(){
 app.configure('development', function(){
 	app.use(express.errorHandler());
 });
+
+
+// Markdown Setup
+var rs = require('robotskirt');
+var md_parser = rs.Markdown.std([rs.EXT_TABLES, rs.HTML_USE_XHTML]);	
+
 
 //// routes
 
@@ -145,21 +157,29 @@ app.get('/me/:memberid', function(req, res){
 });
 
 
-// member settings
+// member profile
 app.get('/me', restricted, function(req, res){
 	res.render('member/profile', {profile:req.user});
 });
 
+// member settings
 app.get('/settings', restricted, function(req, res){
-	res.render('member/settings', {settings:req.user});
+	res.redirect('/settings/info');
 });
 
-app.post('/settings', restricted, function(req, res){
+app.get('/settings/info', restricted, function(req, res){
+	res.render('settings/info', {settings:req.user, settings_section: 'info'});
+});
+
+app.get('/settings/interface', restricted, function(req, res){
+	res.render('settings/interface', {settings:req.user, settings_section: 'interface'});	
+});
+
+app.post('/settings/info', restricted, function(req, res){
 	var me = req.user;
 	var new_data = req.body.settings;
 
-	ddd(me);
-	ddd(new_data);
+	// TODO: validate data
 	
 	me.name = new_data.name;
 	me.website = new_data.website;
@@ -169,18 +189,117 @@ app.post('/settings', restricted, function(req, res){
 
 	me.save(function(err,member){
 		if (err) {
-			res.render('member/settings', {settings:new_data});
+			req.session.alerts.push({type:'error', message:"There was a problem saving your information " + err});
+			res.render('settings/info', {settings:new_data, settings_section:'info'});
 		} else {
-			res.render('member/settings', {settings:req.user});
+			req.session.alerts.push({type:'success', message:"Your information has been saved"});
+			res.redirect('settings/info');
 		}
 	})
+
+});
+
+app.get('/settings/schools', restricted, function(req, res){	
+	School.find({'admins': req.user.id}, function(err, schools){ 
+		res.render('settings/schools', {settings_section: 'schools', my_schools: schools});
+	});
+});
+
+app.get('/settings/schools/edit/:school_webname', restricted, function(req, res){
+	var school = res.locals.school;
+	res.render('school/edit', {school: school});
+});
+
+app.post('/settings/schools/edit/:school_webname', restricted, function(req, res){
+	var school = res.locals.school;
+	var data = req.body.school;
+	
+	school.name = data.name;
+	school.description_md = data.description_md;
+	school.description = md_parser.render(data.description_md);
+	school.summary = data.summary.substr(0,140);
+	
+	school.www = data.www.replace(/^.+:\/\//,'');
+	school.phone = data.phone;
+	school.email = data.email;
+	school.location = data.location;
+	
+	school.save(function(err, saved_school){
+		if (err) {
+			req.session.alerts.push({type:'error', message:"There was a problem saving school information " + err});
+			res.render('school/edit', {school:school});
+		} else {
+			req.session.alerts.push({type:'success', message:"School information has been saved"});
+			res.render('school/edit', {school:saved_school});
+		}
+	});	
+});
+
+// add 
+app.get('/settings/schools/add', restricted, function(req, res){
+	res.render('school/add');
+});
+
+app.post('/settings/schools/add', restricted, function(req, res){
+	
+	var school = new School(req.body.school);
+	school.webname = school.id;
+	
+	var me = req.user;
+	school._creator = me;
+	school.admins.push(me);
+	// TODO: validate data
+	
+	// save school
+	school.save(function (err, school) {
+        if(err) {
+			req.session.alerts.push({type:'error', message:"Problem adding new school. " + err});
+			res.render('school/add', {"school":school});	
+		} else {
+			res.redirect(school.settings_urlpath)
+		}
+	});
 
 });
 
 
 // public
 app.get('/', restricted_home, function(req, res){
-	res.render('memberhome');
+	School
+	.find()
+	.limit(4)
+	.exec(function(err,schools){
+		res.render('memberhome', {schools:schools});
+	});
+});
+
+
+//// schools
+app.get('/explore', function(req, res){
+	School
+	.find()
+	.exec(function(err,schools){
+		res.render('school/list', {schools:schools});
+	});
+});
+
+
+app.get('/info', function(req, res){
+	res.redirect('/info/info');
+});
+
+app.get('/info/:infopage', function(req, res, next){
+	try {
+		var infopage = req.params.infopage;
+	    stats = fs.lstatSync('views/infopages/'+infopage+'.html');
+
+		res.render('infopages/'+infopage);
+		
+	}
+	catch (e) {
+		next();
+	}
+	
 });
 
 
@@ -196,98 +315,27 @@ app.get('/auth/logout', function(req, res){
   	});
 });
 
-app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
-app.get('/auth/facebook/callback', 
-  passport.authenticate('facebook', { successRedirect: '/',
-                                      failureRedirect: '/auth/login' }));
-
-
-//// schools
-app.get('/schools', function(req, res){
-	res.render('school/list', {schools:schools});
-});
-
-app.get('/schools/coogee', function(req, res){
-	res.render('school/list', {schools:schools});
-});
-
-app.get('/schools/coogee/music', function(req, res){
-	var data = {
-		"schools": schools,
-		"location": "Coogee",
-		"field": "Music"
-	}
-	res.render('school/list', data);
-});
-
-// add 
-app.get('/schools//add', restricted, function(req, res){
-	res.render('school/add');
-});
-
-app.post('/schools//add', restricted, function(req, res){
-	
-	var school = new School(req.body.school);
-	school.webname = school.id;
-	
-	// TODO: validate data
-	
-	// save school
-	school.save(function (err, school) {
-        if(err) {
-			// save error message for presenting on screen
-			
-			res.render('school/add', {"school":school});	
-		} else {
-			res.redirect('school//edit/'+school.id)
+app.get(
+	'/auth/facebook/callback', 
+	passport.authenticate(
+		'facebook', 
+		{ 
+			successRedirect: '/', 
+			failureRedirect: '/auth/login' 
 		}
-		// school.save() // success
-	});
+	)
 
-});
+);
+
+
 
 
 // single school
 app.get('/:school_webname', function(req, res){
-	res.render('school/show');
+	res.render('school/show');		
 });
-
-
-// infopages
-// public home page
-app.get('/info/welcome', function(req, res){
-	res.render('infopages/welcome');	
-});
-
-app.get('/info', function(req, res){
-	res.render('infopages/info');
-});
-
-app.get('/info/about', function(req,res){
-	res.render('infopages/about');
-});
-
-app.get('/info/contact', function(req,res){
-	res.render('infopages/contact');
-});
-
-app.get('/info/privacy', function(req,res){
-	res.render('infopages/privacy');
-});
-
-
-
-// search
-
-app.get('/search', function(req, res){
-	res.locals.q = req.query["q"];
-	res.render('search');	
-});
-
-
-
-
 
 
 //// functions
@@ -297,12 +345,17 @@ app.param('school_webname', function(req, res, next, webname){
 	
 	// load school
 	School.findOne({'webname': webname}, function(err, school){
-		if (err) {
-			return next(new Error('school unknown'));
-		}
+		if (school) {
+			res.locals.school = school;
 		
-		res.locals.school = school;
-		next();
+			if (req.user) {
+				res.locals.isadmin = _.contains(_.map(school.admins, function(a) {return a+''}), req.user.id);
+			}
+			next();
+
+		} else {
+			next('route');
+		}		
 	});
 });
 
@@ -316,7 +369,7 @@ function restricted(req, res, next) {
 	} else {
 		// TODO: Capture location for redirect after login
 		
-		req.session.error = 'Access denied!';
+		req.session.alerts.push({type:'error', message: 'Access denied!'});
 		res.redirect('/auth/login');
 	}
 }
@@ -349,65 +402,22 @@ function load_member(req, res, next){
   	next();
 }
 
-//// TEMP DATA
-
-var schools = {
-	"123singwithme": {
-		"id":6, 
-		"webname": "123singwithme",
-		"name":"1-2-3 Sing With Me",
-		"catchphrase":"Music classes for children 6 mo - 5 years",
-		"summary":"1-2-3 Sing With Me offers fun and interactive music classes for children 6 months - 5 years.",
-		"description":"Join us for singing & nursery rhymes, puppets & games, where children have fun & learn numbers too! As well as being lots of fun, our hour long classes are great for:<ul><li>Early numeracy skills</li><li>Boosting language skills</li><li>Developing confidence</li><li>Gross & fine motor skills</li></ul>",
-		"contact": {
-			"www":"www.123singwithme.com.au",
-			"phone":"(02) 9908 1234",
-			"email":"info@123singwithme.com.au"
-		},
-		"text_sections": [
-			{
-				"title":"Enrollments",
-				"text":"Our term4 enrolments are now underway. If you'd like to join us for term4 then please call us on 9908 1234 now for further details and to request your enrolment pack. Alternatively send an email to info@123singwithme.com.au"
-			}
-		]
-	} 
-	,
-	"first_guitar": {
-		"id":1, 
-		"webname": "first_guitar",
-		"name":"First Guitar School",
-		"catchphrase":"Riffing it since 1978",
+function session_alerts(req, res, next){
+	req.session.alerts = req.session.alerts || [];
+	
+	var _r = res.render;
+	res.render = function() {
+		res.locals.alerts = req.session.alerts;
+		req.session.alerts = [];
+		_r.apply(this, arguments);
 	}
-	,
-	"piano_man": {
-		"id":2, 
-		"webname": "piano_man",
-		"name":"The Piano Man",
-		"catchphrase":"Jazzing classics for all ages",
-	}
-	,
-	"sydney_jazz": {
-		"id":3, 
-		"webname": "sydney_jazz",
-		"name":"Sydney Jazz",
-		"catchphrase":"Oldest sydney jazz guitar school",
-	}
-	,
-	"singarama": {
-		"id":4, 
-		"webname": "singarama",
-		"name":"Singarama",
-		"catchphrase":"Singing lessons for tv professionals",
-	}
-	,
-	"bondipiano": {
-		"id":5, 
-		"webname": "bondipiano",
-		"name":"Bondi Piano School",
-		"catchphrase":"Classical piano tuition for children 6+",
-	}
+	next();
 }
 
+function load_csrf_token(req,res,next){
+	res.locals.csrf_token = req.session._csrf;
+	next();
+}
 
 function ddd(obj) {
 	console.log(obj);

@@ -16,8 +16,19 @@ h1
 
 h2
 {
+	font-size: 24px;
+}
+
+h3
+{
 	font-size: 20px;
 }
+
+h4
+{
+	font-size: 16px;
+}
+
 
 .pagecontent
 {
@@ -128,8 +139,13 @@ padding: 0 8px 0 0;
 line-height: 1;
 }
 
-a.brand {
+
+.navbar .brand {
+	float: none;
 	font-family: 'Signika', sans-serif;
+	display: block;
+	text-align: center;
+	color: #400080;
 }
 
 .right {
@@ -156,3 +172,9 @@ a.brand {
 	margin-top: 10px;
 	background-color: #97DEC7; #95f6b9;
 }
+
+.thumbnail h4
+{
+	text-align: center;
+}
+

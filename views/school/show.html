@@ -4,22 +4,16 @@
 
 {% block pagecontent %}
 <div class="container">
-	<div class="page-header">
-		<div class="row">
-			<div class="span10">
-				<h1>{{ school.name }} {#% if school.catchphrase %}<small>{{ school.catchphrase }}</small>{% endif %#}</h1>
-			</div>
-			<div class="span2 right">
-				<a href="#follow" class="btn btn-info btn-large">Follow <i class="icon-eye-open icon-white"></i></a>
-				<!-- Following <a href="#unfollow" class="btn btn-mini hidden">Unfollow</a> -->
-			</div>
-	</div>
 
 	<div class="row">
 		<div class="span8 main">
+
+			<div class="page-header">
+			<h1>{{ school.name }}</h1>
 			{% if school.summary %}
 			<p class="lead">{{ school.summary }}</p>
 			{% endif %}
+			</div>
 
 			{% if school.description %}
 			<p>
@@ -27,50 +21,39 @@
 				{{ school.description }}
 				{% endautoescape %}
 			</p>
-			{% endif %}	
-			
-			{% if school.text_sections %}
-			{% for section in school.text_sections %}
-			<h2>{{ section.title }}</h2>
-			<p>{{ section.text }}</p>
-			{% endfor %}
-
-			{% endif %}	
-			
+			{% endif %}			
 		</div>
 		
 		
 		<div class="span4 sidebar">
-			<p>
-  	      	<img src="http://placehold.it/300x120/ffeedd/000000&text=School+Graphic" alt="" />
-			</p>
-			
-			{% if school.contact %}
-			<!-- <h2>School Contact Info</h2> -->
-			<!-- Contact Info -->
-			<ul class="nav nav-pills nav-stacked">
-				{% if school.contact.phone %}
-					<li class="phone lead"><a href="tel: {{ school.contact.phone }}"><b>{{ school.contact.phone }}</b></a></li>
+			{% if isadmin %}
+			<div class="right">
+			<a class="btn btn-inverse" href="{{ school.settings_urlpath }}"><i class="icon-wrench icon-white"></i> 
+				School Settings</a>
+			</div>
+			{% endif %}
+			<ul class="nav nav-pills lead">
+				{% if school.phone %}
+					<li class="phone"><a href="tel: {{ school.phone }}"><i class="icon-phone-sign"></i> <b>{{ school.phone }}</b></a></li>
 				{% endif %}
-				{% if school.contact.www %}
-					<li class="www"><a href="http://{{ school.contact.www }}"><b>{{school.contact.www}}</b></a></li>
+				{% if school.www %}
+					<li class="www"><a href="http://{{ school.www }}" target="_new"><i class="icon-globe"></i> <b>http://{{school.www}}</b></a></li>
 				{% endif %}
-				{% if school.contact.fb %}
-					<li><a href="{{ school.contact.fb }}">Facebook</a></li>
-				{% endif %}
-				{% if school.contact.fb %}
-					<li><a href="{{ school.contact.fb }}">Facebook</a></li>
+				{% if school.location %}
+					<li><a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new"><i class="icon-map-marker"></i> <b>{{ school.location }}</b></a></li>
 				{% endif %}
 			</ul>
-			{% endif %}
+
+			<!-- <p>
+  	      	<img src="http://placehold.it/300x120/ffeedd/000000&text=School+Graphic" alt="" />
+			</p> -->
+			
 			<!-- <h2>Downloads</h2>
 			<ul class="nav nav-pills nav-stacked">
 				<li><a href="#">Application Form</a></li>
 				<li><a href="#">Direct Debit Form</a></li>
 				<li><a href="#">General Information Booklet</a></li>
 			</ul> -->
-			<p>
-			</p>
 		</div>
 	</div>
 </div>

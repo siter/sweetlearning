@@ -11,17 +11,35 @@
 		{% if member.facebook %}
 		<img src="http://graph.facebook.com/{{ profile.facebook.profile.id }}/picture?width=200&height=200"  class="img-polaroid" /><br />
 		{% endif %}
-		<br />
-		<ul class="nav nav-list">
-		  {% if profile.location %}
-		  <li><i class="icon-map-marker"></i> {{ profile.location }}</li>
-		  {% endif %}
+	   <dl>
+	 	  {% if profile.location %}
+		   <dt>Location</dt>
+		   <dd>{{ profile.location }}</dd>
+	 	  {% endif %}
+
 		  {% if profile.website %}
-		  <li><a href="http://{{ profile.website }}"><i class="icon-globe"></i> {{ profile.website }}</a></li>
+		   <dt>Website</dt>
+		   <dd><a href="http://{{ profile.website }}" rel="nofollow">{{ profile.website }}</a></dd>
 		  {% endif %}
-		  <li><a href="{{ profile.facebook.profile.link }}"><i class="icon-hand-right"></i> Facebook profile</a></li>
-		  <li><i class="icon-time"></i> Joined: {{ profile.created | date("M j, Y", "+11") }}</li>
-		</ul>
+
+		   <dt>Joined</dt>
+		   <dd>{{ profile.created | date("M j, Y", "+11") }}</dd>
+
+	   </dl>
+	<p>
+		{% if member.facebook %}
+ 		<a href="{{ profile.facebook.profile.link }}"><i class="icon-facebook-sign icon-2x"></i></a>
+		{% endif %}
+		
+		{% if member.twitter %}
+ 		<a href="{{ profile.twitter.profile.link }}"><i class="icon-twitter-sign icon-2x"></i></a>
+		{% endif %}
+		
+		{% if member.linkedin %}
+ 		<a href="{{ profile.linkedin.profile.link }}"><i class="icon-linkedin-sign icon-2x"></i></a>
+		{% endif %}
+   </p>
+
 	</div>
 	<div class="span9">
 		<div class="row">
@@ -30,12 +48,13 @@
 			</div>
 			<div class="span3 right">
 				{% if profile.id == member.id %}
-				<a class="btn btn-inverse" href="/settings"><i class="icon-pencil icon-white"></i> Update Details</a>
+				<a class="btn btn-inverse" href="/settings"><i class="icon-pencil icon-white"></i> Edit Profile</a>
 				{% endif %}
 			</div>
 		</div>
 		<p class="lead">{{ profile.bio }}</p>
 		<hr>
+		<a href="/settings/schools" class="btn btn-">Manage Schools</a>
 	</div>
 </div>	
 
