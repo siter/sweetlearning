@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
 var mongoose_options = { db: { safe: true }}
-mongoose.connect(process.env.MONGODB_URI, mongoose_options);
+mongoose.connect(process.env.MONGOHQ_URL, mongoose_options);
 // TODO: check mongoose connection. only start server on success
 
 // Prepare Models
@@ -21,6 +21,10 @@ var app_url = process.env.APP_URL;
 if (process.env.PORT) {
 	app_url += ":"+process.env.PORT;
 }
+
+// SendGrid
+var SendGrid = require('sendgrid').SendGrid;
+var sendgrid = new SendGrid(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 
 // Passport AUTH
 var passport 	= require('passport');
@@ -56,6 +60,19 @@ passport.use(new fb_strategy({
 				
 				member.save(function(err, member){
 					if (err) {return done(err)}
+					
+					// TODO: mailing should be async
+					sendgrid.send({
+					  to: member.email,
+					  from: 'sweetlearning@siter.com.au',
+					  subject: 'Your New Account on Sweet Learning',
+					  text: 'Hi, '+member.name.display+'. Welcome to Sweet Learning. '+ app_url
+					}, function(success, message) {
+					  if (!success) {
+					    console.log(message);
+					  }
+					});
+					
 					done(null, member);
 				});
 			}
@@ -85,11 +102,13 @@ var express = require('express'),
 var app = express();
 // Sessions
 var RedisStore = require('connect-redis')(express);
+var redis = require('redis-url').connect(process.env.REDISTOGO_URL);
 
 
 swig.init({
     root: __dirname + '/views',
     allowErrors: true, // allows errors to be thrown and caught by express instead of suppressed
+	filters: require('./lib/swigfilters'),
 	cache: false //TODO: disable for production
 });
 
@@ -108,7 +127,7 @@ app.configure(function(){
 	
 	app.use(express.cookieParser(process.env.SECRET));
 	app.use(express.session({
-		store: new RedisStore,
+		store: new RedisStore({client:redis}),
 		key: "_.sid",
 		cookie: {maxAge: 32000000}
 	}));
@@ -267,7 +286,7 @@ app.post('/settings/schools/add', restricted, function(req, res){
 app.get('/', restricted_home, function(req, res){
 	School
 	.find()
-	.limit(4)
+	// .limit(4)
 	.exec(function(err,schools){
 		res.render('memberhome', {schools:schools});
 	});
@@ -347,6 +366,8 @@ app.param('school_webname', function(req, res, next, webname){
 	School.findOne({'webname': webname}, function(err, school){
 		if (school) {
 			res.locals.school = school;
+		
+			// ddd(school);
 		
 			if (req.user) {
 				res.locals.isadmin = _.contains(_.map(school.admins, function(a) {return a+''}), req.user.id);

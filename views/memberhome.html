@@ -9,7 +9,9 @@
 	{% for school in schools %}
 		<li class="span3">
 		  	  <a href="/{{school.webname}}" class="thumbnail">
+				  {#
   					<img src="http://placehold.it/260x100/&text={{school.name}}" alt="{{school.name}}">
+				#}
 				  <h4>{{school.name}}</h4>
   				<p>{{school.summary}}</p>  
 			</a>
@@ -19,7 +21,24 @@
 	</ul>
 	{% endif %}
 
-	<h3>Schools You Follow</h3>
+	{% if schools %}
+	<ul class="thumbnails">
+	{% for school in schools %}
+		<li class="span3">
+		  	  <a href="/{{school.webname}}" class="thumbnail">
+				  {#
+  					<img src="http://placehold.it/260x100/&text={{school.name}}" alt="{{school.name}}">
+				#}
+				  <h4>{{school.name}}</h4>
+  				<p>{{school.summary}}</p>  
+			</a>
+		</li>
+	{% endfor %}
+
+	</ul>
+	{% endif %}
+
+	<!-- <h3>Schools You Follow</h3>
 
 	<div class="media">
 	  <a class="pull-left" href="#">
@@ -41,7 +60,7 @@
 		<p>Aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 		<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 	  </div>
-	</div>
+	</div> -->
 		
 </div>
 

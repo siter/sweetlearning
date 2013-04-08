@@ -3,6 +3,7 @@
 {% block title %}{{ school.name }} - School Information{% endblock %}
 
 {% block pagecontent %}
+<!-- {{ school._id }} -->
 <div class="container">
 
 	<div class="row">
@@ -29,7 +30,7 @@
 			{% if isadmin %}
 			<div class="right">
 			<a class="btn btn-inverse" href="{{ school.settings_urlpath }}"><i class="icon-wrench icon-white"></i> 
-				School Settings</a>
+				Edit School Settings</a>
 			</div>
 			{% endif %}
 			<ul class="nav nav-pills lead">
@@ -37,10 +38,18 @@
 					<li class="phone"><a href="tel: {{ school.phone }}"><i class="icon-phone-sign"></i> <b>{{ school.phone }}</b></a></li>
 				{% endif %}
 				{% if school.www %}
-					<li class="www"><a href="http://{{ school.www }}" target="_new"><i class="icon-globe"></i> <b>http://{{school.www}}</b></a></li>
+				<li class="www">
+					<a href="http://{{ school.www }}" target="_new" title="Visit School Website" data-toggle="tooltip" >
+					<i class="icon-globe"></i> http://{{school.www|shorten(15)}}
+					</a>
+				</li>
 				{% endif %}
 				{% if school.location %}
-					<li><a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new"><i class="icon-map-marker"></i> <b>{{ school.location }}</b></a></li>
+				<li>
+					<a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new">
+						<i class="icon-map-marker"></i> {{ school.location }}
+					</a>
+				</li>
 				{% endif %}
 			</ul>
 

@@ -1,37 +1,32 @@
 {
-	"name": "sweetlearning",
-	"author": "Andrei Railean",
-	"description": "Learning provider directory",
-	"version": "0.2.1",
-	"private": true,
-
-	"scripts": {
-		"start": "node app"
-	},
-
-	"dependencies": {
-		"underscore": "1.4.x",
-		"express": "3.1.x",
-		"consolidate": "0.8.0",
-		"swig": "0.13.5",
-		
-		"mongoose": "3.5.x",
-		"connect-redis": "1.4.x",
-		"hiredis": "0.1.15",
-		
-		"robotskirt": "2.7.x",
-
-		"passport": "0.1.16",
-		"passport-local": "0.1.6",
-		"passport-facebook": "0.1.5"
-	},
-
-	"devDependencies": {
-		"vows":"0.7.0"
-	},
-
-	"engines": {
-		"node": "0.10.x"
-	}
-
+  "name": "sweetlearning",
+  "author": "Andrei Railean",
+  "description": "Learning provider directory",
+  "version": "0.2.1",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "underscore": "1.4.x",
+    "express": "3.1.x",
+    "consolidate": "0.8.0",
+    "swig": "0.13.5",
+    "mongoose": "3.5.x",
+    "connect-redis": "1.4.x",
+    "hiredis": "0.1.15",
+    "robotskirt": "2.7.x",
+    "passport": "0.1.16",
+    "passport-local": "0.1.6",
+    "passport-facebook": "0.1.5",
+    "elasticsearchclient": "0.4.x",
+    "sendgrid": "0.2.x",
+    "useragent": "~2.0.3"
+  },
+  "devDependencies": {
+    "vows": "0.7.0"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
 }

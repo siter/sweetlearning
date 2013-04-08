@@ -2,7 +2,7 @@
 	<div class="navbar-inner">
 		<div class="container">
 			<div class="row">
-			<div class="span5">
+			<div class="span4">
 				<ul class="nav nav-pills">
 				<li>
 					<a href="/"><i class="icon-home icon-large" title="Go to Home Page"></i></a>
@@ -10,23 +10,24 @@
 				<li>
 					<a href="/explore">Explore</a>
 		    	</li>
+				{# 
 				<li>
 					<form class="navbar-form form-search" action="/search" method="get">
 
 					    <input  name="q" {% if q %}value="{{ q }}"{% endif%} type="search" class="span2 search-query" placeholder="Search &hellip;" >
 					</form>
 		    	</li>
+				#}
 				</ul>
 				
 			</div>
-			<div class="span3">
-						<a class="brand" href="/">Sweet Learning</a>					
+			<div class="span4">
+					<a class="brand" href="/">Sweet Learning</a>					
 			  </ul>
 										
 			</div>
 			<div class="span4">
 				<div class="pull-right">
-					{% if member %}
 					
 					<ul class="nav">
 						<li class="dropdown">
@@ -41,6 +42,7 @@
 							</ul>
 				    	</li>
 
+						{% if member %}
 						<li class="dropdown">
 						    <a href="/me" class=" dropdown-toggle" data-toggle="dropdown">
 						    	<i class="icon-user icon-large"></i><b class="caret"></b>
@@ -56,13 +58,14 @@
 								<li><a tabindex="-1" href="/info"><i class="icon-question-sign"></i> Help &amp; Info</a></li>
 							</ul>
 				    	</li>
+						{% endif %}
 
 				  </ul>
+				{% if not member %}
+				<!-- <a class="btn btn-primary" href="/register">Register</a> -->
+				<a class="btn btn-primary" href="/auth/login">Log In</a>
+				{% endif %}
 					
-					{% else %}
-					<!-- <a class="btn btn-primary" href="/register">Register</a> -->
-					<a class="btn btn-primary" href="/auth/login">Log In</a>
-					{% endif %}
 			</div>
 		</div>
 			
