@@ -1,0 +1,43 @@
+{% extends 'schooladmin/_layout.html' %}
+
+{% block settingscontent %}
+<form class="form-horizontal" method="POST" action="{{ school.settings_urlpath }}">
+  <div class="control-group">
+    <label class="control-label" for="inputLocation">Location</label>
+    <div class="controls">
+      <input type="text" id="inputLocation" class="span6" placeholder="School Location"  name="school[location]"  value="{{ school.location }}">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputWebsite">Website</label>
+    <div class="controls">
+		<div class="input-prepend">
+		  <span class="add-on">http://</span>
+	      <input type="text" id="inputWebsite" class="span5" placeholder="example.com"  name="school[www]" value="{{ school.www }}">
+		</div>
+			
+    </div>
+  </div>
+  <div class="control-group error">
+    <label class="control-label" for="inputEmail">Email</label>
+    <div class="controls">
+      <input type="text" id="inputEmail" placeholder="School Email"  name="school[email]"  value="{{ school.email }}">
+    {% if !school.email_verified %}<small class="help-inline" >Email Not Verified</small>{% endif %}
+
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPhone">Phone</label>
+    <div class="controls">
+      <input type="text" id="inputPhone" class="input-small" placeholder="School Contact Phone"  name="school[phone]"  value="{{ school.phone }}">
+    </div>
+  </div>
+
+  <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save School Detail</button> or 
+	<a class="" href="{{ school.urlpath }}">Return to School Page</a> without Saving  
+  </div>
+
+  <input type="hidden" name="_csrf" value="{{ csrf_token }}" />
+</form>
+{% endblock %}

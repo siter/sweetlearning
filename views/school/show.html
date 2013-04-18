@@ -5,65 +5,63 @@
 {% block pagecontent %}
 <!-- {{ school._id }} -->
 <div class="container">
+				<div class="page-header">
 
-	<div class="row">
-		<div class="span8 main">
 
-			<div class="page-header">
-			<h1>{{ school.name }}</h1>
-			{% if school.summary %}
-			<p class="lead">{{ school.summary }}</p>
-			{% endif %}
+				<h1>{{ school.name }}</h1>
+	
+				{% if school.summary %}
+				<p class="lead">{{ school.summary }}</p>
+				{% endif %}
+
+				<ul class="nav nav-pills lead">
+					{% if school.phone %}
+						<li class="phone"><a href="tel: {{ school.phone }}"><i class="icon-phone-sign"></i> <b>{{ school.phone }}</b></a></li>
+					{% endif %}
+					{% if school.www %}
+					<li class="www">
+						<a href="http://{{ school.www }}" target="_new" title="Visit School Website" data-toggle="tooltip" >
+						<i class="icon-globe"></i> http://{{school.www|shorten(15)}}
+						</a>
+					</li>
+					{% endif %}
+					{% if school.location %}
+					<li>
+						<a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new">
+							<i class="icon-map-marker"></i> {{ school.location }}
+						</a>
+					</li>
+					{% endif %}
+				</ul>
+
 			</div>
+</div>
 
+<div class="container">
+	<div class="row">
+		<div class="span4 pull-right">
+			{% if isadmin %}
+			<a class="btn btn-inverse btn-block btn-large" href="{{ school.settings_urlpath }}"><i class="icon-edit"></i> Edit School Settings</a>
+			<br />
+			{% endif %}			
+			<ul class="nav nav-tabs nav-stacked">
+		  	  <li class="active">
+		  	    <a href="#">Overview</a>
+		  	  </li>
+		  	  <li><a href="#">Courses &amp; Classes</a></li>
+		  	  <li><a href="#">Discussions</a></li>
+		  	  <li><a href="#">Downloads</a></li>
+			</ul>
+		</div>
+		<div class="span8">
 			{% if school.description %}
 			<p>
-				{% autoescape false %}
-				{{ school.description }}
-				{% endautoescape %}
+			{% autoescape false %}
+			{{ school.description }}
+			{% endautoescape %}
 			</p>
 			{% endif %}			
 		</div>
-		
-		
-		<div class="span4 sidebar">
-			{% if isadmin %}
-			<div class="right">
-			<a class="btn btn-inverse" href="{{ school.settings_urlpath }}"><i class="icon-wrench icon-white"></i> 
-				Edit School Settings</a>
-			</div>
-			{% endif %}
-			<ul class="nav nav-pills lead">
-				{% if school.phone %}
-					<li class="phone"><a href="tel: {{ school.phone }}"><i class="icon-phone-sign"></i> <b>{{ school.phone }}</b></a></li>
-				{% endif %}
-				{% if school.www %}
-				<li class="www">
-					<a href="http://{{ school.www }}" target="_new" title="Visit School Website" data-toggle="tooltip" >
-					<i class="icon-globe"></i> http://{{school.www|shorten(15)}}
-					</a>
-				</li>
-				{% endif %}
-				{% if school.location %}
-				<li>
-					<a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new">
-						<i class="icon-map-marker"></i> {{ school.location }}
-					</a>
-				</li>
-				{% endif %}
-			</ul>
-
-			<!-- <p>
-  	      	<img src="http://placehold.it/300x120/ffeedd/000000&text=School+Graphic" alt="" />
-			</p> -->
-			
-			<!-- <h2>Downloads</h2>
-			<ul class="nav nav-pills nav-stacked">
-				<li><a href="#">Application Form</a></li>
-				<li><a href="#">Direct Debit Form</a></li>
-				<li><a href="#">General Information Booklet</a></li>
-			</ul> -->
-		</div>
-	</div>
+	</div>	
 </div>
 {% endblock %}

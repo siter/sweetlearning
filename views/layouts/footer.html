@@ -1,17 +1,17 @@
 <footer>
 <div class="container">
-	<div class="row">
+	<div class="row center">
 
 		{% if not member %}
-		<div class="span6 center">
+		<div class="span6">
 			<ul class="links-list">
-				<li><a href="/info">See what's good about being on <b>Sweet Learning</b></a></li>
+				<li><a href="/info">Learn more about <b>Sweet Learning</b></a></li>
 			</ul>	
 		</div>
 		{% endif %}
 		<div class="span6">
 			<ul class="links-list">
-				<li>&copy; Sweet Learning 2013</li>
+				<li>&copy; Sweet Learning {{ now | date("Y")}}</li>
 				<!-- <li><a href="/info/contact">Contact</a></li>
 				<li><a href="/info/privacy">Privacy</a></li> -->
 			</ul>	

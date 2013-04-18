@@ -11,18 +11,40 @@
 </div>
 
 {% if schools %}
-<ul class="thumbnails">
+<div class="thumbnails">
+<div class="span3">
 {% for school in schools %}
-	<li class="span2">
-	  	  <a href="/{{school.webname}}" class="thumbnail">
-			  <img src="http://placehold.it/130x65/523575&text=School+Image" alt="">
+	  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
 			  <h4>{{school.name}}</h4>
 			  {{school.summary}}
 		</a>
-	</li>
 {% endfor %}
-
-</ul>
+</div>
+<div class="span3">
+{% for school in schools|reverse %}
+	  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+			  <h4>{{school.name}}</h4>
+			  {{school.summary}}
+		</a>
+{% endfor %}
+</div>
+<div class="span3">
+{% for school in schools|reverse %}
+	  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+			  <h4>{{school.name}}</h4>
+			  {{school.summary}}
+		</a>
+{% endfor %}
+</div>
+<div class="span3">
+{% for school in schools|reverse %}
+	  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+			  <h4>{{school.name}}</h4>
+			  {{school.summary}}
+		</a>
+{% endfor %}
+</div>
+</div>
 {% endif %}
  
 </div>

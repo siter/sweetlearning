@@ -1,0 +1,37 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-reorder icon-black"></span>
+      </button>
+      <a class="brand" href="/">Sweet Learning</a>
+      <div class="nav-collapse collapse right">
+        <ul class="nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/explore">Explore</a></li>
+		{% if member %}
+		<li class="dropdown">
+		    <a href="/me" class=" dropdown-toggle" data-toggle="dropdown">
+		    	<i class="icon-user icon-large"></i>{{ member.name.first }} <b class="caret"></b>
+		    </a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a tabindex="-1" href="/me">Your Profile</a></li>
+				<li class="divider"></li>
+				<li><a tabindex="-1" href="/auth/logout">Log Out</a></li>
+			</ul>
+    	</li>
+		{% endif %}
+        </ul>
+  		{% if not member %}
+  		<!-- <a class="btn btn-primary" href="/register">Register</a> -->
+  		<a class="btn btn-primary" href="/auth/login">Log In</a>
+  		{% endif %}
+		
+		<form class="navbar-form form-search pull-right" action="/search" method="get">
+
+		    <input  name="q" {% if q %}value="{{ q }}"{% endif%} type="search" class="span2 search-query" placeholder="Search &hellip;" >
+		</form>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>

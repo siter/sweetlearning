@@ -33,5 +33,4 @@ MemberSchema.virtual('created').get(function() {
 	return this._id.getTimestamp();
 });
 
-
 module.exports = mongoose.model('Member', MemberSchema);

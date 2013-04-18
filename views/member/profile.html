@@ -9,8 +9,18 @@
 		
 	<div class="span3">
 		{% if member.facebook %}
-		<img src="http://graph.facebook.com/{{ profile.facebook.profile.id }}/picture?width=200&height=200"  class="img-polaroid" /><br />
+		<img 
+			src="http://graph.facebook.com/{{ profile.facebook.profile.id }}/picture?width=200&height=200"  
+			class="img-circle" 
+		/>
+		<br />
 		{% endif %}
+		
+		{% if profile.id == member.id %}
+		<br />
+		<a href="/settings" class="btn btn-small"><i class="icon-pencil icon-white"></i> Edit Profile</a>
+		{% endif %}
+		
 	   <dl>
 	 	  {% if profile.location %}
 		   <dt>Location</dt>
@@ -42,19 +52,8 @@
 
 	</div>
 	<div class="span9">
-		<div class="row">
-			<div class="span6">
-				<h1>{{ profile.name.display }}</h1>
-			</div>
-			<div class="span3 right">
-				{% if profile.id == member.id %}
-				<a class="btn btn-inverse" href="/settings"><i class="icon-pencil icon-white"></i> Edit Profile</a>
-				{% endif %}
-			</div>
-		</div>
+		<h1>{{ profile.name.display }}</h1>
 		<p class="lead">{{ profile.bio }}</p>
-		<hr>
-		<a href="/settings/schools" class="btn btn-">Manage Schools</a>
 	</div>
 </div>	
 

@@ -7,61 +7,23 @@
 	{% if schools %}
 	<ul class="thumbnails">
 	{% for school in schools %}
-		<li class="span3">
+		<li class="span3" >
 		  	  <a href="/{{school.webname}}" class="thumbnail">
-				  {#
-  					<img src="http://placehold.it/260x100/&text={{school.name}}" alt="{{school.name}}">
-				#}
-				  <h4>{{school.name}}</h4>
-  				<p>{{school.summary}}</p>  
+				  <h4>{{school.name | shorten(20)}}</h4>
+  				<p>{{school.summary}}</p>
 			</a>
+			<span class="label">6mo+</span>
+			<a href="#"><span class="label">Music</span></a>
+			<span class="label">Movement</span>
+			<span class="label">Weekly</span>
+			<span class="label">Rhythm</span>
+			<span class="label">Singing</span>
 		</li>
 	{% endfor %}
 
 	</ul>
 	{% endif %}
 
-	{% if schools %}
-	<ul class="thumbnails">
-	{% for school in schools %}
-		<li class="span3">
-		  	  <a href="/{{school.webname}}" class="thumbnail">
-				  {#
-  					<img src="http://placehold.it/260x100/&text={{school.name}}" alt="{{school.name}}">
-				#}
-				  <h4>{{school.name}}</h4>
-  				<p>{{school.summary}}</p>  
-			</a>
-		</li>
-	{% endfor %}
-
-	</ul>
-	{% endif %}
-
-	<!-- <h3>Schools You Follow</h3>
-
-	<div class="media">
-	  <a class="pull-left" href="#">
-	    <img class="media-object" src="http://placehold.it/64x64">
-	  </a>
-	  <div class="media-body">
-	    <h4 class="media-heading">Bondi Social</h4>
-		<p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut</p>
-		<p>Commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-	  </div>
-	</div>
-	
-	<div class="media">
-	  <a class="pull-left" href="#">
-	    <img class="media-object" src="http://placehold.it/64x64">
-	  </a>
-	  <div class="media-body">
-	    <h4 class="media-heading">1-2-3 Sing With Me</h4>
-		<p>Aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-		<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	  </div>
-	</div> -->
-		
 </div>
 
 {% endblock %}

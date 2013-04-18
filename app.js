@@ -3,6 +3,7 @@ var _  		= require('underscore');
 var http 	= require('http');
 var path 	= require('path');
 
+var moment = require('moment');
 
 // Mongoose Config
 var mongoose = require('mongoose');
@@ -114,6 +115,7 @@ swig.init({
 
 
 app.configure(function(){
+	
 	app.set('port', process.env.PORT || 3000);
 	app.set('views', __dirname + '/views');
 	app.engine('.html', cons.swig);
@@ -129,12 +131,13 @@ app.configure(function(){
 	app.use(express.session({
 		store: new RedisStore({client:redis}),
 		key: "_.sid",
-		cookie: {maxAge: 32000000}
+		cookie: {maxAge: 4838400000} // 8 weeks
 	}));
 	
     app.use(passport.initialize());
     app.use(passport.session());
-
+	
+	app.use(now);
 	app.use(load_member);
 	app.use(session_alerts);
 	
@@ -211,25 +214,32 @@ app.post('/settings/info', restricted, function(req, res){
 			req.session.alerts.push({type:'error', message:"There was a problem saving your information " + err});
 			res.render('settings/info', {settings:new_data, settings_section:'info'});
 		} else {
-			req.session.alerts.push({type:'success', message:"Your information has been saved"});
+			req.session.alerts.push({type:'success', message:"Your information has been saved. <a href='/me' class='btn'>View Profile</a>"});
 			res.redirect('settings/info');
 		}
 	})
 
 });
 
-app.get('/settings/schools', restricted, function(req, res){	
+app.get('/settings/schools', restricted, function(req, res){
+	res.redirect('/schooladmin');
+});
+
+app.get('/schooladmin', restricted, function(req, res){	
 	School.find({'admins': req.user.id}, function(err, schools){ 
 		res.render('settings/schools', {settings_section: 'schools', my_schools: schools});
 	});
 });
 
-app.get('/settings/schools/edit/:school_webname', restricted, function(req, res){
-	var school = res.locals.school;
-	res.render('school/edit', {school: school});
+app.get('/schooladmin/:school_webname', restricted, function(req, res){
+	res.redirect(req.url+"/details");
 });
 
-app.post('/settings/schools/edit/:school_webname', restricted, function(req, res){
+app.get('/schooladmin/:school_webname/:school_edit_section', restricted, function(req, res){
+	res.render('schooladmin/'+res.locals.section);
+});
+
+app.post('/schooladmin/:school_webname', restricted, function(req, res){
 	var school = res.locals.school;
 	var data = req.body.school;
 	
@@ -238,7 +248,7 @@ app.post('/settings/schools/edit/:school_webname', restricted, function(req, res
 	school.description = md_parser.render(data.description_md);
 	school.summary = data.summary.substr(0,140);
 	
-	school.www = data.www.replace(/^.+:\/\//,'');
+	school.www = data.www.replace(/^.+:\/\//,'');		
 	school.phone = data.phone;
 	school.email = data.email;
 	school.location = data.location;
@@ -246,20 +256,20 @@ app.post('/settings/schools/edit/:school_webname', restricted, function(req, res
 	school.save(function(err, saved_school){
 		if (err) {
 			req.session.alerts.push({type:'error', message:"There was a problem saving school information " + err});
-			res.render('school/edit', {school:school});
+			res.render('schooladmin/edit', {school:school});
 		} else {
 			req.session.alerts.push({type:'success', message:"School information has been saved"});
-			res.render('school/edit', {school:saved_school});
+			res.render('schooladmin/edit', {school:saved_school});
 		}
 	});	
 });
 
 // add 
-app.get('/settings/schools/add', restricted, function(req, res){
-	res.render('school/add');
+app.get('/schooladmin/add', restricted, function(req, res){
+	res.render('schooladmin/add');
 });
 
-app.post('/settings/schools/add', restricted, function(req, res){
+app.post('/schooladmin/add', restricted, function(req, res){
 	
 	var school = new School(req.body.school);
 	school.webname = school.id;
@@ -273,7 +283,7 @@ app.post('/settings/schools/add', restricted, function(req, res){
 	school.save(function (err, school) {
         if(err) {
 			req.session.alerts.push({type:'error', message:"Problem adding new school. " + err});
-			res.render('school/add', {"school":school});	
+			res.render('schooladmin/add', {"school":school});	
 		} else {
 			res.redirect(school.settings_urlpath)
 		}
@@ -380,6 +390,25 @@ app.param('school_webname', function(req, res, next, webname){
 	});
 });
 
+app.param('school_edit_section', function(req, res, next, section){
+	if (!section) {
+		section = "details";
+	}
+
+	var schooladmin_sections = {
+		details: "Basic Details",
+		contact: "Contact Info"
+	};
+	
+	if (schooladmin_sections[section]) {
+		res.locals.section = section; 
+		res.locals.sections = schooladmin_sections;
+		next();
+	} else {
+		next('route');
+	}
+	
+});
 
 
 // middleware
@@ -440,6 +469,12 @@ function load_csrf_token(req,res,next){
 	next();
 }
 
+function now(req,res,next){
+	res.locals.now = moment();
+	next();
+}
+
+
 function ddd(obj) {
 	console.log(obj);
 }
@@ -447,5 +482,5 @@ function ddd(obj) {
 ////
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Sweet Learning listening on " + app_url);
+  console.log("Sweet Learning: " + app_url);
 });

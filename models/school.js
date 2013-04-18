@@ -29,7 +29,7 @@ SchoolSchema.virtual('urlpath').get(function() {
 });
 
 SchoolSchema.virtual('settings_urlpath').get(function() {
-	return '/settings/schools/edit/' + this.webname;
+	return '/schooladmin/' + this.webname;
 });
 
 SchoolSchema.virtual('created').get(function() {

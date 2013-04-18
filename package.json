@@ -21,7 +21,9 @@
     "passport-facebook": "0.1.5",
     "elasticsearchclient": "0.4.x",
     "sendgrid": "0.2.x",
-    "useragent": "~2.0.3"
+    "useragent": "~2.0.3",
+    "moment": "~2.0.0",
+    "redis-url": "~0.1.0"
   },
   "devDependencies": {
     "vows": "0.7.0"
