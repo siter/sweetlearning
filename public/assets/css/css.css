@@ -217,3 +217,12 @@ form label
   
 }
 
+@media (max-width: 480px) {
+	.img-circle
+	{
+		width: 100px;
+		height: 100px;
+	}
+	
+}
+

@@ -7,7 +7,11 @@
 <div class="container">
 <div class="row">
 		
-	<div class="span3">
+	<div class="span9 pull-right">
+		<h1>{{ profile.name.display }}</h1>
+		<p class="lead">{{ profile.bio }}</p>
+	</div>
+	<div class="span3 pull-left">
 		{% if member.facebook %}
 		<img 
 			src="http://graph.facebook.com/{{ profile.facebook.profile.id }}/picture?width=200&height=200"  
@@ -50,10 +54,6 @@
 		{% endif %}
    </p>
 
-	</div>
-	<div class="span9">
-		<h1>{{ profile.name.display }}</h1>
-		<p class="lead">{{ profile.bio }}</p>
 	</div>
 </div>	
 

@@ -40,18 +40,17 @@
 <div class="container">
 	<div class="row">
 		<div class="span4 pull-right">
-			{% if isadmin %}
-			<a class="btn btn-inverse btn-block btn-large" href="{{ school.settings_urlpath }}"><i class="icon-edit"></i> Edit School Settings</a>
-			<br />
-			{% endif %}			
 			<ul class="nav nav-tabs nav-stacked">
 		  	  <li class="active">
 		  	    <a href="#">Overview</a>
 		  	  </li>
-		  	  <li><a href="#">Courses &amp; Classes</a></li>
-		  	  <li><a href="#">Discussions</a></li>
-		  	  <li><a href="#">Downloads</a></li>
+		  	  <li><a href="#">Classes (12)</a></li>
+		  	  <li><a href="#">Discussions (1232)</a></li>
+		  	  <li><a href="#">Downloads (25)</a></li>
 			</ul>
+			{% if isadmin %}
+			<a class="btn btn-inverse btn-block btn-large" href="{{ school.settings_urlpath }}"><i class="icon-edit"></i> Edit School Settings</a>
+			{% endif %}			
 		</div>
 		<div class="span8">
 			{% if school.description %}

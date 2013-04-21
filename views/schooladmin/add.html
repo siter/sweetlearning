@@ -10,17 +10,22 @@
 
 	<div class="row">
 		<div class="span8 main">
-			<form method="post" action="/settings/schools/add">
+			<form method="post" action="/schooladmin/add">
 			  <fieldset>
 			    <label>School Name</label>
-			    <input name="school[name]" type="text" placeholder="Name" class="span6" value="{% if school.name %}{{ school.name }}{% endif %}">
+			    <input name="school[name]" type="text" placeholder="Name" class="span6" value="{{ school.name }}">
 
-			    <label>Quickly about your school</label>
-			    <input name="school[quickinfo]" type="text" placeholder="Quick info…" class="span6" value="{{ school.quickinfo }}">
+			    <label>Summary</label>
+				<textarea class="span7" id="inputSummary"  rows="2" name="school[summary]" placeholder="Quick Summary. Max 140 characters." class="span6" maxlength="140">{{ school.summary }}</textarea>
 
-			    <label>First paragraph</label>
-				<textarea rows="4" name="school[leading_text]" class="span6">{% if school.leading_text %}{{ school.leading_text }}{% endif %}</textarea>
-			    <small class="help-block" >Quick summary. Will be cut to 30 letters max.</small>
+			    <label>Website</label>
+				<div class="input-prepend">
+				  <span class="add-on">http://</span>
+			      <input type="text" id="inputWebsite" class="span5" placeholder="example.com"  name="school[www]" value="{{ school.www }}">
+				</div>
+
+			    <label>Phone Number</label>
+		        <input type="text" id="inputPhone" class="input-medium" placeholder="(XX) XXXX XXXX"  name="school[phone]"  value="{{ school.phone }}">
 
 		  	</fieldset>
 				<button type="submit" class="btn">Submit</button>
