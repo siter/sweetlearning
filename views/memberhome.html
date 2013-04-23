@@ -5,23 +5,40 @@
 <div class="container">	
 
 	{% if schools %}
-	<ul class="thumbnails">
+	<div class="thumbnails">
+	<div class="span3">
 	{% for school in schools %}
-		<li class="span3" >
-		  	  <a href="/{{school.webname}}" class="thumbnail">
-				  <h4>{{school.name | shorten(20)}}</h4>
-  				<p>{{school.summary}}</p>
+		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+				  <h4>{{school.name}}</h4>
+				  {{school.summary}}
 			</a>
-			<span class="label">6mo+</span>
-			<a href="#"><span class="label">Music</span></a>
-			<span class="label">Movement</span>
-			<span class="label">Weekly</span>
-			<span class="label">Rhythm</span>
-			<span class="label">Singing</span>
-		</li>
 	{% endfor %}
-
-	</ul>
+	</div>
+	<div class="span3">
+	{% for school in schools|reverse %}
+		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+				  <h4>{{school.name}}</h4>
+				  {{school.summary}}
+			</a>
+	{% endfor %}
+	</div>
+	<div class="span3">
+	{% for school in schools|reverse %}
+		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+				  <h4>{{school.name}}</h4>
+				  {{school.summary}}
+			</a>
+	{% endfor %}
+	</div>
+	<div class="span3">
+	{% for school in schools|reverse %}
+		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+				  <h4>{{school.name}}</h4>
+				  {{school.summary}}
+			</a>
+	{% endfor %}
+	</div>
+	</div>
 	{% endif %}
 
 </div>

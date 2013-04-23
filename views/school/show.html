@@ -16,19 +16,26 @@
 
 				<ul class="nav nav-pills lead">
 					{% if school.phone %}
-						<li class="phone"><a href="tel: {{ school.phone }}"><i class="icon-phone-sign"></i> <b>{{ school.phone }}</b></a></li>
+						<li class="phone"><a href="tel: {{ school.phone }}" ref="tel"><i class="icon-phone-sign  hidden-phone"></i> <b>{{ school.phone }}</b></a></li>
 					{% endif %}
 					{% if school.www %}
 					<li class="www">
-						<a href="http://{{ school.www }}" target="_new" title="Visit School Website" data-toggle="tooltip" >
-						<i class="icon-globe"></i> http://{{school.www|shorten(15)}}
+						<a href="http://{{ school.www }}" target="_new" title="Visit School Website">
+						<i class="icon-globe hidden-phone"></i> http://{{school.www|shorten(15)}}
+						</a>
+					</li>
+					{% endif %}
+					{% if school.email %}
+					<li class="email">
+						<a href="mailto:{{ school.email }}" title="Send Email to School" >
+						<i class="icon-envelope hidden-phone"></i> {{school.email}}
 						</a>
 					</li>
 					{% endif %}
 					{% if school.location %}
 					<li>
 						<a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new">
-							<i class="icon-map-marker"></i> {{ school.location }}
+							<i class="icon-map-marker hidden-phone"></i> {{ school.location }}
 						</a>
 					</li>
 					{% endif %}
