@@ -3,29 +3,30 @@
 {% block title %}Editing {{ school.name }} (School){% endblock %}
 
 {% block pagecontent %}
-<div class="container">
+<div class="container editor">
+	<div class="page-header">
+		<h1><span class="muted">Edit<span class="hidden-phone"> School</span></span> {{sections[section]}}</h1>
+		<a href="{{ school.urlpath }}"><i class="icon-circle-arrow-left hidden-phone"></i> <b>{{ school.name }}</b></a>
+		<small class="muted">ID:&nbsp;{{school.id|upper}}</small>
+	</div>
 
 	<div class="row">
-		<div class="span3" >
-			<div class="well" style="padding: 8px 0">
+		<div class="span9 pull-right">
+			{% block settingscontent %}{% endblock %}
+		</div>
+		<div class="span3 pull-left" >
+			<div class="well well-small" style="padding: 4px 0">
 			<ul class="nav nav-list">
-	  		  <li class="nav-header">{{ school.name }}</li>
+  			  <li class="nav-header">Editor Sections</li>
 			  {% for s in sections %}
-			  <li {% if section == loop.key %}{% set title = s %} class="active"{% endif %}>
+			  <li {% if section == loop.key %}class="active"{% endif %}>
 				  <a href="{{ school.settings_urlpath }}/{{ loop.key }}">{{ s }}</a>
 			  </li>
 			  {% endfor %}
 			  <li class="divider"></li>
-			  <li ><small><a href="{{ school.urlpath }}"> Return to School Page</a></small></li>
+			  <li ><small><a href="{{ school.urlpath }}"> Return to School Profile</a></small></li>
 			</ul>
 			</div>
-		</div>
-		<div class="span9">
-			<div class="page-header">
-					<h1>Editing {{title}}</h1>
-			</div>
-
-			{% block settingscontent %}{% endblock %}
 		</div>
 	</div>
 </div>

@@ -4,12 +4,10 @@
 
 {% block pagecontent %}
 <!-- {{ school._id }} -->
+<div class="page-header">
 <div class="container">
-				<div class="page-header">
-
-
 				<h1>{{ school.name }}</h1>
-	
+				
 				{% if school.summary %}
 				<p class="lead">{{ school.summary }}</p>
 				{% endif %}
@@ -40,7 +38,7 @@
 					</li>
 					{% endif %}
 				</ul>
-
+				
 			</div>
 </div>
 
@@ -59,7 +57,7 @@
 			<a class="btn btn-inverse btn-block btn-large" href="{{ school.settings_urlpath }}"><i class="icon-edit"></i> Edit School Settings</a>
 			{% endif %}			
 		</div>
-		<div class="span8">
+		<div class="span8 pull-left">
 			{% if school.description %}
 			<p>
 			{% autoescape false %}

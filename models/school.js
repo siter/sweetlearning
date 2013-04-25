@@ -29,11 +29,23 @@ SchoolSchema.virtual('urlpath').get(function() {
 });
 
 SchoolSchema.virtual('settings_urlpath').get(function() {
-	return '/schooladmin/' + this.webname;
+	return '/schooladmin/' + this._id;
 });
 
 SchoolSchema.virtual('created').get(function() {
 	return this._id.getTimestamp();
+});
+
+SchoolSchema.virtual('name_maxlength').get(function() {
+	return 40;
+});
+
+SchoolSchema.virtual('webname_maxlength').get(function() {
+	return 30;
+});
+
+SchoolSchema.virtual('summary_maxlength').get(function() {
+	return 140;
 });
 
 module.exports = mongoose.model('School', SchoolSchema);
