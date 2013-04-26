@@ -1,0 +1,88 @@
+{% extends 'schooladmin/_layout.html' %}
+
+{% block settingscontent %}
+<section id="active">
+<form method="POST" action="{{ school.settings_urlpath }}/account">
+    <label for="inputName">School Name</label>
+	<input type="text" id="inputName" class="span5" placeholder="School Name"  name="school[name]" value="{{ school.name }}" maxlength="{{ school.name_maxlength }}" />
+		
+	<label for="inputWebname">Webname</label>
+	<input type="text" id="inputWebname" class="span5" placeholder="School Name"  name="school[webname]" value="{{ school.webname }}"  maxlength="{{ school.webname_maxlength }}"  />
+	<small class="help-block" >{{ baseurl }}/<b>{{ school.webname }}</b></small>
+	<div class="alert alert-info" ><i class="icon-info-sign"></i> Links from other sites will stop working if you change the webname.</div>
+	 
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+
+	<input type="hidden" name="_csrf" value="{{ csrf_token }}" />
+</form>
+</section>
+
+<hr />
+
+<section id="active">
+<h2>Public Visibility</h2>
+<p>
+	When school is not active only admins can see it.
+</p>
+<form method="POST" action="{{ school.settings_urlpath }}/account/setactive">
+	
+	{% if school.status.active %}
+		<button type="submit" class="btn">Deactivate</button>
+		<input type="hidden" name="status" value="false" />
+		<span class="label label-success">Active</span>
+
+	{% else %}
+		<button type="submit" class="btn btn-primary">Activate</button>	
+		<input type="hidden" name="status" value="true" />
+		<span class="label label-important">NOT ACTIVE</span>
+
+	{% endif %}
+
+	<input type="hidden" name="_csrf" value="{{ csrf_token }}" />
+</form>
+</section>
+
+<hr />
+
+<section id="delete">
+<h2 class="muted">Delete School</h2>
+<p>
+	Once deleted, there's no way back.
+</p>
+<p>
+<a href="#deleteModal" role="button" class="btn btn-small" data-toggle="modal">Delete This School</a> <small class="hint">You'll need to confirm this.</small>
+</p>
+	
+
+<!-- Modal -->
+<div id="deleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="DeleteSchoolDialog" aria-hidden="true">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="myModalLabel">Delete <span class="muted">{{ school.name }}</span></h3>
+	  </div>
+  	<form method="post" action="{{ school.settings_urlpath }}/account/delete" >
+	  <div class="modal-body">
+		  <p>
+		  	If you delete this school, we will not be able to help you get it back. You'll have to create a new one from scratch.
+		  </p>
+	      <label class="checkbox">
+	        <input type="checkbox" name="agree"> I understand
+	      </label>
+		  <p>
+		  	Is there a reason you want to delete this school?
+		  </p>
+		  <input class="input-xxlarge" type="text" name="reason" placeholder="why, oh why?">
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	    <button class="btn btn-primary" type="submit" >Delete this school now</button>
+		<input type="hidden" name="_csrf" value="{{ csrf_token }}" />
+	  </div>
+	</form>
+</div>
+
+</section>
+
+{% endblock %}

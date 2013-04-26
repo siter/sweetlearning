@@ -185,6 +185,12 @@ form label
 	font-weight: bold;
 }
 
+.modal > form 
+{
+	margin: 0;
+	padding: 0;
+}
+
 @media (max-width: 980px) {
   /* Unfloat brand */
   body {

@@ -9,6 +9,10 @@
 		
 	<div class="span9 pull-right">
 		<h1>{{ profile.name.display }}</h1>
+		{% if profile.id == member.id %}
+		<a href="/settings" class="btn"><i class="icon-pencil icon-white"></i> Edit Profile</a>
+		{% endif %}
+		
 		<p class="lead">{{ profile.bio }}</p>
 	</div>
 	<div class="span3 pull-left">
@@ -18,11 +22,6 @@
 			class="img-circle" 
 		/>
 		<br />
-		{% endif %}
-		
-		{% if profile.id == member.id %}
-		<br />
-		<a href="/settings" class="btn btn-small"><i class="icon-pencil icon-white"></i> Edit Profile</a>
 		{% endif %}
 		
 	   <dl>

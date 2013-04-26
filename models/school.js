@@ -16,12 +16,26 @@ var SchoolSchema = new Schema({
 	phone: String,
 	email: { type: String, lowercase: true},
 	email_validated: { type: Boolean, default: false },
+	
+	status: {
+		active: { type: Boolean, default: false },
+		deleted: { type: Boolean, default: false }
+	},
 		
 	_creator: { type: ObjectId, ref: 'Member' },
-	admins: [{ type: ObjectId, ref: 'Member'}]
+	_deleter: { type: ObjectId, ref: 'Member' },
+	
+	admins: [{ type: ObjectId, ref: 'Member'}],
+
+	notes: [String]
+
 });
 
 SchoolSchema.path('admins').index(true);
+SchoolSchema.path('status.active').index(true);
+SchoolSchema.path('status.deleted').index(true);
+
+
 
 
 SchoolSchema.virtual('urlpath').get(function() {

@@ -230,6 +230,8 @@ app.get('/settings/schools', restricted, function(req, res){
 	res.redirect('/schooladmin');
 });
 
+
+
 app.get('/schooladmin', restricted, function(req, res){	
 	School.find({'admins': req.user.id}, function(err, schools){ 
 		res.render('settings/schools', {settings_section: 'schools', my_schools: schools});
@@ -237,7 +239,7 @@ app.get('/schooladmin', restricted, function(req, res){
 });
 
 app.get('/schooladmin/:school_id', restricted, function(req, res){
-	res.redirect(req.url+"/name");
+	res.redirect(req.url+"/account");
 });
 
 app.get('/schooladmin/:school_id/:school_edit_section', restricted, function(req, res){
@@ -249,7 +251,7 @@ app.get('/schooladmin/:school_id/:school_edit_section', restricted, function(req
 	res.render('schooladmin/'+res.locals.section);
 });
 
-app.post('/schooladmin/:school_id/name', restricted, function(req, res){
+app.post('/schooladmin/:school_id/account', restricted, function(req, res){
 	var school = res.locals.school;
 	var data = req.body.school;
 	
@@ -264,8 +266,58 @@ app.post('/schooladmin/:school_id/name', restricted, function(req, res){
 		} else {
 			req.session.alerts.push({type:'success', message:"School information updated"});
 		}
-		res.redirect(school.settings_urlpath+'/name');
+		res.redirect('back');
 	});	
+});
+
+app.post('/schooladmin/:school_id/account/setactive', restricted, function(req, res){
+	var school = res.locals.school;
+	var status = req.body.status;
+	
+	school.status.active = JSON.parse(status);
+	
+	school.save(function(err, saved_school){
+		if (err) {
+			req.session.alerts.push({type:'error', message:"Status update failed"});
+		} else {
+			req.session.alerts.push({type:'success', message:"School status updated"});
+		}
+		res.redirect('back');
+	});	
+});
+
+app.post('/schooladmin/:school_id/account/delete', restricted, function(req, res){
+	var school = res.locals.school;
+	
+	if (!req.body.agree) {
+		req.session.alerts.push({type:'error', message:"We're not sure you understand what you're doing. You click 'I understand'."});
+		res.redirect('back');
+	} else {
+		school.status.active = false;
+		school.status.deleted = true;
+		school.webname = school.id;
+		
+		var me = req.user;
+		school._deleter = me;
+		school.admins = [];
+		
+		school.notes.push("Delete Reason: " + req.body.reason);
+		school.notes.push("Delete Time: " + moment().utc().format());
+
+		school.save(function(err, saved_school){
+			if (err) {
+				req.session.alerts.push({type:'error', message: "Could not delete school"});
+				res.redirect('back');
+			} else {
+				// TODO: send email
+				
+				req.session.alerts.push({type:'success', message:"School "+ school.name +" deleted"});
+				ddd('delete');
+				ddd(school);
+				res.redirect('/me');
+			}
+		});
+	}
 });
 
 app.post('/schooladmin/:school_id/description', restricted, function(req, res){
@@ -343,11 +395,39 @@ app.post('/schooladmin/add', restricted, function(req, res){
 
 });
 
+app.post('/schooladmin/quickadd', restricted, function(req, res){
+	
+	var data = req.body.school;
+	
+	var school = new School();
+
+	school.name = data.name.substr(0,40);
+
+	school.webname = school.id;
+	
+	var me = req.user;
+	school._creator = me;
+	school.admins.push(me);
+	
+	// save school
+	school.save(function (err, school) {
+        if(err) {
+			req.session.alerts.push({type:'error', message:"Problem adding new school. " + err});
+			res.redirect('back');	
+		} else {
+			res.redirect(school.settings_urlpath)
+		}
+	});
+
+});
+
+
+
 
 // public
 app.get('/', restricted_home, function(req, res){
 	School
-	.find()
+	.find({'status.active': true})
 	// .limit(4)
 	.exec(function(err,schools){
 		res.render('memberhome', {schools:schools});
@@ -426,7 +506,7 @@ app.param('school_webname', function(req, res, next, webname){
 	
 	// load school
 	School.findOne({'webname': webname}, function(err, school){
-		if (school) {
+		if (school && school.status.active) {
 			res.locals.school = school;
 		
 			// ddd(school);
@@ -446,7 +526,8 @@ app.param('school_id', function(req, res, next, school_id){
 	
 	// load school
 	School.findById(school_id, function(err, school){
-		if (school) {
+		if (school && !school.status.deleted) {
+
 			res.locals.school = school;
 		
 			// ddd(school);
@@ -469,9 +550,9 @@ app.param('school_edit_section', function(req, res, next, section){
 	}
 
 	var schooladmin_sections = {
-		name: "Name",
+		account: "Account",
 		description: "Description",
-		contact: "Contact Info"
+		contact: "Contact Info",
 	};
 	
 	if (schooladmin_sections[section]) {

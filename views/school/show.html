@@ -12,6 +12,8 @@
 				<p class="lead">{{ school.summary }}</p>
 				{% endif %}
 
+
+				{% if school.phone or school.www or school.email or school.location %}
 				<ul class="nav nav-pills lead">
 					{% if school.phone %}
 						<li class="phone"><a href="tel: {{ school.phone }}" ref="tel"><i class="icon-phone-sign  hidden-phone"></i> <b>{{ school.phone }}</b></a></li>
@@ -38,6 +40,7 @@
 					</li>
 					{% endif %}
 				</ul>
+				{% endif %}
 				
 			</div>
 </div>
