@@ -16,12 +16,13 @@
 	      <input type="text" id="inputLastName" placeholder="Last Name"  name="settings[name][last]" value="{{ settings.name.last }}">
 	    </div>
 	  </div>
-	  <div class="control-group">
+{#
+	  <!-- <div class="control-group">
 	    <label class="control-label" for="inputEmail">Email</label>
 	    <div class="controls">
 	      <input type="text" id="inputEmail" placeholder="Your Email"  name="settings[email]"  value="{{ settings.email }}">
 	    </div>
-	  </div>
+	  </div> -->
 	  <div class="control-group">
 	    <label class="control-label" for="inputLocation">Location</label>
 	    <div class="controls">
@@ -38,11 +39,12 @@
 			
 	    </div>
 	  </div>
+	  #}
 
 	  <div class="control-group">
 	    <label class="control-label" for="inputBio">About you</label>
 	    <div class="controls">
-			<textarea class="span5" id="inputBio"  rows="4" name="settings[bio]" placeholder="A little bit about you" class="span6">{{ settings.bio }}</textarea>
+			<textarea class="span5" id="inputBio"  rows="4" name="settings[bio]" placeholder="A little bit about you" class="span6"  data-toggle="autogrow">{{ settings.bio }}</textarea>
 	    </div>
 	  </div>
 

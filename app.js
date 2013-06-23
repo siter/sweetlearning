@@ -16,6 +16,7 @@ mongoose.connect(process.env.MONGOHQ_URL, mongoose_options);
 // Prepare Models
 var Member = require('./models/member.js');
 var School = require('./models/school.js');
+var Course = require('./models/course.js');
 
 
 var app_url = process.env.APP_URL;
@@ -120,7 +121,7 @@ app.configure(function(){
 	app.set('views', __dirname + '/views');
 	app.engine('.html', cons.swig);
 	app.set('view engine', 'html');
-	app.use(express.favicon(__dirname + '/public/assets/img/favicon.ico'));
+	app.use(express.favicon(__dirname + '/public/assets/img/l_logo.png'));
 	app.use(express.static(path.join(__dirname, 'public')));
 
 	app.use(express.logger('dev'));
@@ -238,10 +239,23 @@ app.get('/schooladmin', restricted, function(req, res){
 	});
 });
 
+
 app.get('/schooladmin/:school_id', restricted, function(req, res){
 	res.redirect(req.url+"/account");
 });
 
+app.get('/schooladmin/:school_id/*', load_school_edit_sections, function(req, res, next){
+	next();
+});
+
+app.get('/schooladmin/:school_id/courses', restricted, function(req, res){
+	var school = res.locals.school;
+	Course.find({'school': school.id}, function(err, courses){
+		res.render('schooladmin/courses', {section: 'courses', courses: courses});
+	});
+});
+
+// admin screen catch-all
 app.get('/schooladmin/:school_id/:school_edit_section', restricted, function(req, res){
 	if (req.session.schooladmin_badschool) {
 		res.locals.school = req.session.schooladmin_badschool;
@@ -251,12 +265,14 @@ app.get('/schooladmin/:school_id/:school_edit_section', restricted, function(req
 	res.render('schooladmin/'+res.locals.section);
 });
 
+/// SCHOOL ADMIN
+/// POST
 app.post('/schooladmin/:school_id/account', restricted, function(req, res){
 	var school = res.locals.school;
 	var data = req.body.school;
 	
 	school.name = data.name.substr(0,school.name_maxlength);
-	school.webname = data.webname.substr(0,school.webname_maxlength);
+	school.webname = data.webname.substr(0,school.webname_maxlength).replace(/\s+/g, '-');
 	// check webname for uniqueness (may be handled by mongo)
 	
 	school.save(function(err, saved_school){
@@ -273,9 +289,9 @@ app.post('/schooladmin/:school_id/account', restricted, function(req, res){
 app.post('/schooladmin/:school_id/account/setactive', restricted, function(req, res){
 	var school = res.locals.school;
 	var status = req.body.status;
-	
+
 	school.status.active = JSON.parse(status);
-	
+
 	school.save(function(err, saved_school){
 		if (err) {
 			req.session.alerts.push({type:'error', message:"Status update failed"});
@@ -290,7 +306,7 @@ app.post('/schooladmin/:school_id/account/delete', restricted, function(req, res
 	var school = res.locals.school;
 	
 	if (!req.body.agree) {
-		req.session.alerts.push({type:'error', message:"We're not sure you understand what you're doing. You click 'I understand'."});
+		req.session.alerts.push({type:'error', message:"We're not sure you understand what you're doing. Click 'I understand'."});
 		res.redirect('back');
 	} else {
 		school.status.active = false;
@@ -314,7 +330,7 @@ app.post('/schooladmin/:school_id/account/delete', restricted, function(req, res
 				req.session.alerts.push({type:'success', message:"School "+ school.name +" deleted"});
 				ddd('delete');
 				ddd(school);
-				res.redirect('/me');
+				res.redirect('/schooladmin');
 			}
 		});
 	}
@@ -358,6 +374,36 @@ app.post('/schooladmin/:school_id/contact', restricted, function(req, res){
 		res.redirect('back');
 	});	
 });
+
+
+app.post('/schooladmin/:school_id/course-quickadd', restricted, function(req, res){
+	var school = res.locals.school;
+	
+	var data = req.body.course;
+	
+	var course = new Course();
+
+	course.name = data.name.substr(0,40);
+
+	course.webname = course.id;
+	
+	var me = req.user;
+	course._creator = me;
+	course.school = school;
+	
+	// save school
+	course.save(function (err, course) {
+        if(err) {
+			req.session.alerts.push({type:'error', message:"Problem adding new course. " + err});
+			res.redirect('back');
+		} else {
+			ddd(course);
+			res.redirect(course.settings_urlpath)
+		}
+	});
+
+});
+
 
 
 // add 
@@ -491,11 +537,19 @@ app.get(
 );
 
 
-
-
 // single school
-app.get('/:school_webname', function(req, res){
-	res.render('school/show');		
+app.get('/:school_webname', function(req, res, next){
+	if (!res.locals.school.status.active) {
+		if (res.locals.isadmin) {
+			req.session.alerts.push({type:'error', message:"This page is HIDDEN. Only you can see it. You are a manager. View Settings to make visible."});
+			res.render('school/show');
+		} else {
+			next('route');
+		}
+	} else {
+		res.render('school/show');
+	}
+
 });
 
 
@@ -503,10 +557,10 @@ app.get('/:school_webname', function(req, res){
 
 //// params
 app.param('school_webname', function(req, res, next, webname){
-	
+
 	// load school
 	School.findOne({'webname': webname}, function(err, school){
-		if (school && school.status.active) {
+		if (school) {
 			res.locals.school = school;
 		
 			// ddd(school);
@@ -539,25 +593,15 @@ app.param('school_id', function(req, res, next, school_id){
 
 		} else {
 			next('route');
-		}		
+		}
 	});
 });
 
 
 app.param('school_edit_section', function(req, res, next, section){
-	if (!section) {
-		section = "details";
-	}
 
-	var schooladmin_sections = {
-		account: "Account",
-		description: "Description",
-		contact: "Contact Info",
-	};
-	
-	if (schooladmin_sections[section]) {
+	if (res.locals.sections[section]) {
 		res.locals.section = section; 
-		res.locals.sections = schooladmin_sections;
 		next();
 	} else {
 		next('route');
@@ -567,6 +611,18 @@ app.param('school_edit_section', function(req, res, next, section){
 
 
 // middleware
+
+function load_school_edit_sections(req, res, next) {
+	var schooladmin_sections = {
+		account: "Account",
+		description: "Description",
+		contact: "Contact Info",
+		courses: "Courses"
+	};
+	res.locals.sections = schooladmin_sections;
+	
+	next();
+}
 
 function restricted(req, res, next) {
 	if (req.isAuthenticated()) {

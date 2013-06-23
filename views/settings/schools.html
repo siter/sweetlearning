@@ -24,7 +24,7 @@
 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		    <h3 id="myModalLabel">Add New School</h3>
 		  </div>
-  		<form method="post" action="/schooladmin/quickadd">
+  		<form method="post" action="{{ school.settings_urlpath }}/course/quickadd">
 		  <div class="modal-body">
 			    <label>School Name</label>
 			    <input name="school[name]" type="text" placeholder="Name" class="input-large" value="{{ school.name }}">

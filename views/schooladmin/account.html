@@ -1,13 +1,13 @@
 {% extends 'schooladmin/_layout.html' %}
 
 {% block settingscontent %}
-<section id="active">
+<section id="active"  class="sl-section">
 <form method="POST" action="{{ school.settings_urlpath }}/account">
     <label for="inputName">School Name</label>
-	<input type="text" id="inputName" class="span5" placeholder="School Name"  name="school[name]" value="{{ school.name }}" maxlength="{{ school.name_maxlength }}" />
+	<input type="text" id="inputName" class="input-large" placeholder="School Name"  name="school[name]" value="{{ school.name }}" maxlength="{{ school.name_maxlength }}" />
 		
 	<label for="inputWebname">Webname</label>
-	<input type="text" id="inputWebname" class="span5" placeholder="School Name"  name="school[webname]" value="{{ school.webname }}"  maxlength="{{ school.webname_maxlength }}"  />
+	<input type="text" id="inputWebname" class="input-large" placeholder="School Name"  name="school[webname]" value="{{ school.webname }}"  maxlength="{{ school.webname_maxlength }}"  />
 	<small class="help-block" >{{ baseurl }}/<b>{{ school.webname }}</b></small>
 	<div class="alert alert-info" ><i class="icon-info-sign"></i> Links from other sites will stop working if you change the webname.</div>
 	 
@@ -19,41 +19,41 @@
 </form>
 </section>
 
-<hr />
+<section id="active"  class="sl-section">
+{% if school.status.active %}
 
-<section id="active">
-<h2>Public Visibility</h2>
+<h2>Listing is Active</h2>
 <p>
-	When school is not active only admins can see it.
+	When school is active, everyone can see it.
 </p>
 <form method="POST" action="{{ school.settings_urlpath }}/account/setactive">
 	
-	{% if school.status.active %}
-		<button type="submit" class="btn">Deactivate</button>
+	<div class="form-actions">
+		<button type="submit" class="btn">Deactivate</button> <small class="hint">Admins will still have access to edit it</small>
 		<input type="hidden" name="status" value="false" />
-		<span class="label label-success">Active</span>
-
-	{% else %}
-		<button type="submit" class="btn btn-primary">Activate</button>	
-		<input type="hidden" name="status" value="true" />
-		<span class="label label-important">NOT ACTIVE</span>
-
-	{% endif %}
-
-	<input type="hidden" name="_csrf" value="{{ csrf_token }}" />
+		<input type="hidden" name="_csrf" value="{{ csrf_token }}" />
+	</div>
 </form>
+
+{% else %}
+
+<h2>Listing is HIDDEN</h2>
+<p>
+	When school is Hidden only admins can see it.
+</p>
+<form method="POST" action="{{ school.settings_urlpath }}/account/setactive">
+	
+	<div class="form-actions alert alert-block">
+		<button type="submit" class="btn btn-primary">Activate</button>	<span class="hint">Everyone will be able to see it</span>
+		<input type="hidden" name="status" value="true" />
+		<input type="hidden" name="_csrf" value="{{ csrf_token }}" />
+	</div>
+</form>
+
+{% endif %}
 </section>
 
-<hr />
-
-<section id="delete">
-<h2 class="muted">Delete School</h2>
-<p>
-	Once deleted, there's no way back.
-</p>
-<p>
-<a href="#deleteModal" role="button" class="btn btn-small" data-toggle="modal">Delete This School</a> <small class="hint">You'll need to confirm this.</small>
-</p>
+<small class="pull-right"><a href="#deleteModal" role="button" class="-btn -btn-small" data-toggle="modal">Delete This School</a></small>
 	
 
 <!-- Modal -->
@@ -76,13 +76,11 @@
 		  <input class="input-xxlarge" type="text" name="reason" placeholder="why, oh why?">
 	  </div>
 	  <div class="modal-footer">
-	    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	    <button class="btn btn-primary" type="submit" >Delete this school now</button>
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">Stop! Don't Delete Yet</button>
+	    <button class="btn btn-primary" type="submit" >Delete Immediately</button>
 		<input type="hidden" name="_csrf" value="{{ csrf_token }}" />
 	  </div>
 	</form>
 </div>
-
-</section>
 
 {% endblock %}

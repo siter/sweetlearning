@@ -6,7 +6,12 @@
 <!-- {{ school._id }} -->
 <div class="page-header">
 <div class="container">
-				<h1>{{ school.name }}</h1>
+	{% if isadmin %}
+	<a class="btn pull-right" href="{{ school.settings_urlpath }}">Edit School <i class="icon-edit"></i></a>
+	{% endif %}
+				<h1>
+					{{ school.name }} 
+				</h1>
 				
 				{% if school.summary %}
 				<p class="lead">{{ school.summary }}</p>
@@ -48,17 +53,10 @@
 <div class="container">
 	<div class="row">
 		<div class="span4 pull-right">
-			<ul class="nav nav-tabs nav-stacked">
-		  	  <li class="active">
-		  	    <a href="#">Overview</a>
-		  	  </li>
-		  	  <li><a href="#">Classes (12)</a></li>
-		  	  <li><a href="#">Discussions (1232)</a></li>
-		  	  <li><a href="#">Downloads (25)</a></li>
-			</ul>
-			{% if isadmin %}
-			<a class="btn btn-inverse btn-block btn-large" href="{{ school.settings_urlpath }}"><i class="icon-edit"></i> Edit School Settings</a>
-			{% endif %}			
+			<!-- <ul class="nav nav-tabs nav-stacked">
+				<li class="active"><a href="#">Overview</a></li>
+				<li><a href="#">Classes (12)</a></li>
+			</ul> -->
 		</div>
 		<div class="span8 pull-left">
 			{% if school.description %}

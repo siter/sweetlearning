@@ -8,10 +8,11 @@
 <div class="row">
 		
 	<div class="span9 pull-right">
-		<h1>{{ profile.name.display }}</h1>
 		{% if profile.id == member.id %}
-		<a href="/settings" class="btn"><i class="icon-pencil icon-white"></i> Edit Profile</a>
+		<a href="/settings" class="btn pull-right">Edit Profile <i class="icon-pencil icon-white"></i></a>
 		{% endif %}
+		
+		<h1>{{ profile.name.display }}</h1>
 		
 		<p class="lead">{{ profile.bio }}</p>
 	</div>
