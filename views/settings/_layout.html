@@ -2,29 +2,31 @@
 
 {% block title %}Edit Settings{% endblock %}
 
-{% set sections = [
-	{key:'info',name:'Personal Details'}, 
-	{key:'schools',name:'School Manager'}
-] %}
-
 {% block pagecontent %}
-<div class="container">
+<div class="container editor">
+	<div class="page-header">
+		<h1><span class="muted">Edit<span class="hidden-phone"> Profile</span></span> {{sections[section]}}</h1>
+		<a href="/me"><i class="icon-circle-arrow-left hidden-phone"></i> <b>{{ settings.name.display }}</b></a>
+		<small class="muted">ID:&nbsp;{{settings.id|upper}}</small>
+
+	</div>
 
 	<div class="row">
-		<div class="span3" >
-			<div class="well" style="padding: 8px 0">
+		<div class="span9 pull-right">
+			{% block settingscontent %}{% endblock %}
+		</div>
+		<div class="span3 pull-left" >
+			<div class="well well-small" style="padding: 4px 0">
 			<ul class="nav nav-list">
-	  		  <li class="nav-header">{{ member.name.display }}</li>
 			  {% for s in sections %}
-			  <li {% if settings_section == s.key %} class="active"{% endif %}><a href="/settings/{{ s.key }}">{{ s.name }}</a></li>
+			  	<li {% if section == loop.key %}class="active"{% endif %}>
+					<a href="/settings/{{ loop.key }}">{{ s }}</a>
+				</li>
 			  {% endfor %}
 			  <li class="divider"></li>
-			  <li ><a href="/me"><small>Back to Profile</small></a></li>
+			  <li ><small><a href="/me"> View Profile</a></small></li>
 			</ul>
 			</div>
-		</div>
-		<div class="span9">
-			{% block settingscontent %}{% endblock %}
 		</div>
 	</div>
 </div>

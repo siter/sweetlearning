@@ -1,21 +1,17 @@
 <footer>
-<div class="container">
-	<div class="row center">
-
-		{% if not member %}
-		<div class="span6">
-			<ul class="links-list">
-				<li><a href="/info">Learn more about <b>Sweet Learning</b></a></li>
-			</ul>	
-		</div>
-		{% endif %}
-		<div class="span6">
-			<ul class="links-list">
-				<li>&copy; Sweet Learning {{ now | date("Y")}}</li>
-				<!-- <li><a href="/info/contact">Contact</a></li>
-				<li><a href="/info/privacy">Privacy</a></li> -->
-			</ul>	
-		</div>
-	</div>	
+<div class="container center">
+	    <a href="/" >
+	    	<img src="/assets/img/l_400.png" width="50px" height="50px" />
+	    </a>
+		<p>
+			This is <strong>Sweet Learning</strong>
+		</p>
+		<small>
+		<ul class="links-list">
+			<li><a href="/info/about">About Us</a></li>
+			<li><a href="/info/privacy">Privacy</a></li>
+			<li><a href="/info">More &hellip;</a></li>
+		</ul>	
+		</small>
 </div>
 </footer>

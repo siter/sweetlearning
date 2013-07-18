@@ -3,54 +3,54 @@
 {% block title %}{{ school.name }} - School Information{% endblock %}
 
 {% block pagecontent %}
+
+{% if isadmin %}
+<a href="{{ school.settings_urlpath }}" class="editaction">Edit</a>
+{% endif %}
+
 <!-- {{ school._id }} -->
-<div class="page-header">
 <div class="container">
-	{% if isadmin %}
-	<a class="btn pull-right" href="{{ school.settings_urlpath }}">Edit School <i class="icon-edit"></i></a>
-	{% endif %}
-				<h1>
-					{{ school.name }} 
-				</h1>
-				
-				{% if school.summary %}
-				<p class="lead">{{ school.summary }}</p>
-				{% endif %}
+	<div class="page-header">
+		<h1>
+			{{ school.name }} 
+		</h1>
+		
+		{% if school.summary %}
+		<p class="lead">{{ school.summary }}</p>
+		{% endif %}
 
 
-				{% if school.phone or school.www or school.email or school.location %}
-				<ul class="nav nav-pills lead">
-					{% if school.phone %}
-						<li class="phone"><a href="tel: {{ school.phone }}" ref="tel"><i class="icon-phone-sign  hidden-phone"></i> <b>{{ school.phone }}</b></a></li>
-					{% endif %}
-					{% if school.www %}
-					<li class="www">
-						<a href="http://{{ school.www }}" target="_new" title="Visit School Website">
-						<i class="icon-globe hidden-phone"></i> http://{{school.www|shorten(15)}}
-						</a>
-					</li>
-					{% endif %}
-					{% if school.email %}
-					<li class="email">
-						<a href="mailto:{{ school.email }}" title="Send Email to School" >
-						<i class="icon-envelope hidden-phone"></i> {{school.email}}
-						</a>
-					</li>
-					{% endif %}
-					{% if school.location %}
-					<li>
-						<a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new">
-							<i class="icon-map-marker hidden-phone"></i> {{ school.location }}
-						</a>
-					</li>
-					{% endif %}
-				</ul>
-				{% endif %}
-				
-			</div>
-</div>
-
-<div class="container">
+		{% if school.phone or school.www or school.email or school.location %}
+		<ul class="nav nav-pills lead">
+			{% if school.phone %}
+				<li class="phone"><a href="tel: {{ school.phone }}" ref="tel"><i class="icon-phone-sign  hidden-phone"></i> <b>{{ school.phone }}</b></a></li>
+			{% endif %}
+			{% if school.www %}
+			<li class="www">
+				<a href="http://{{ school.www }}" target="_new" title="Visit School Website">
+				<i class="icon-globe hidden-phone"></i> http://{{school.www|shorten(15)}}
+				</a>
+			</li>
+			{% endif %}
+			{% if school.email %}
+			<li class="email">
+				<a href="mailto:{{ school.email }}" title="Send Email to School" >
+				<i class="icon-envelope hidden-phone"></i> {{school.email}}
+				</a>
+			</li>
+			{% endif %}
+			{% if school.location %}
+			<li>
+				<a href="http://maps.google.com.au/maps?q={{ school.location }}" target="_new">
+					<i class="icon-map-marker hidden-phone"></i> {{ school.location }}
+				</a>
+			</li>
+			{% endif %}
+		</ul>
+		{% endif %}
+		
+	</div>
+	
 	<div class="row">
 		<div class="span4 pull-right">
 			<!-- <ul class="nav nav-tabs nav-stacked">

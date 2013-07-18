@@ -31,7 +31,7 @@ CourseSchema.virtual('created').get(function() {
 });
 
 CourseSchema.virtual('settings_urlpath').get(function() {
-	return '/courseadmin/' + this._id;
+	return '/-/course/' + this._id;
 });
 
 CourseSchema.virtual('urlpath').get(function() {
@@ -40,4 +40,3 @@ CourseSchema.virtual('urlpath').get(function() {
 
 //////
 module.exports = mongoose.model('Course', CourseSchema);
-

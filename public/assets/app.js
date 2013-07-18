@@ -18,6 +18,11 @@
 
     // tooltip demo
     $("a[data-toggle=tooltip]").tooltip();
+    
+    var edit_action = $('a.editaction')[0];
+    if (edit_action) {
+      $("#editbtn").prop("href", edit_action.href).toggle();
+    }
 
   })
 

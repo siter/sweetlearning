@@ -8,7 +8,20 @@
 	<div class="thumbnails">
 	<div class="span3">
 	{% for school in schools %}
-		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+	
+		  	  <a href="/{{school.webname}}" class="thumbnail">
+				  <img src="http://placehold.it/500x200">
+				  <div style="background-color: rgba(255,255,255,0.7); margin-top: -20px; padding: 5px; position: relative;">
+				  <h4>{{school.name}}</h4>
+				  {{school.summary}}
+			  	  </div>
+			</a>
+	{% endfor %}
+	</div>
+	<div class="span3">
+	{% for school in schools|reverse %}
+	  <a href="/{{school.webname}}" class="thumbnail">
+				  <img src="http://placehold.it/350x150">
 				  <h4>{{school.name}}</h4>
 				  {{school.summary}}
 			</a>
@@ -16,7 +29,7 @@
 	</div>
 	<div class="span3">
 	{% for school in schools|reverse %}
-		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+	  <a href="/{{school.webname}}" class="thumbnail">
 				  <h4>{{school.name}}</h4>
 				  {{school.summary}}
 			</a>
@@ -24,15 +37,8 @@
 	</div>
 	<div class="span3">
 	{% for school in schools|reverse %}
-		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
-				  <h4>{{school.name}}</h4>
-				  {{school.summary}}
-			</a>
-	{% endfor %}
-	</div>
-	<div class="span3">
-	{% for school in schools|reverse %}
-		  	  <a href="/{{school.webname}}" class="thumbnail" style="margin-bottom: 5px;">
+	  <a href="/{{school.webname}}" class="thumbnail">
+				  <img src="http://placehold.it/350x150">
 				  <h4>{{school.name}}</h4>
 				  {{school.summary}}
 			</a>

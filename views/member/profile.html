@@ -4,59 +4,73 @@
 
 {% block pagecontent %}
 
+{% if profile.id == member.id %}
+ <a href="/settings" class="editaction">Edit</a>
+{% endif %}
+
 <div class="container">
-<div class="row">
-		
-	<div class="span9 pull-right">
-		{% if profile.id == member.id %}
-		<a href="/settings" class="btn pull-right">Edit Profile <i class="icon-pencil icon-white"></i></a>
-		{% endif %}
-		
-		<h1>{{ profile.name.display }}</h1>
-		
-		<p class="lead">{{ profile.bio }}</p>
-	</div>
-	<div class="span3 pull-left">
-		{% if member.facebook %}
-		<img 
-			src="http://graph.facebook.com/{{ profile.facebook.profile.id }}/picture?width=200&height=200"  
-			class="img-circle" 
-		/>
-		<br />
-		{% endif %}
-		
-	   <dl>
-	 	  {% if profile.location %}
-		   <dt>Location</dt>
-		   <dd>{{ profile.location }}</dd>
-	 	  {% endif %}
+  <div class="row">
 
-		  {% if profile.website %}
-		   <dt>Website</dt>
-		   <dd><a href="http://{{ profile.website }}" rel="nofollow">{{ profile.website }}</a></dd>
-		  {% endif %}
+    <div class="span9">
 
-		   <dt>Joined</dt>
-		   <dd>{{ profile.created | date("M j, Y", "+11") }}</dd>
+      <h1>{{ profile.name.display }}</h1>
 
-	   </dl>
-	<p>
-		{% if member.facebook %}
- 		<a href="{{ profile.facebook.profile.link }}"><i class="icon-facebook-sign icon-2x"></i></a>
-		{% endif %}
-		
-		{% if member.twitter %}
- 		<a href="{{ profile.twitter.profile.link }}"><i class="icon-twitter-sign icon-2x"></i></a>
-		{% endif %}
-		
-		{% if member.linkedin %}
- 		<a href="{{ profile.linkedin.profile.link }}"><i class="icon-linkedin-sign icon-2x"></i></a>
-		{% endif %}
-   </p>
+      <p class="lead">{{ profile.bio }}</p>
+      
+      <h2>Schools</h2>
+    	{% if schools %}
+    	<table class="table table-striped table-hover">
+    		{% for school in schools %}
+    		<tr>
+    			<td>{% if !school.status.active %}<span class="label label-important">NOT ACTIVE</span>{% endif %} <a href="{{ school.urlpath }}">{{ school.name}}</a></td>
+    			<td><a href="{{ school.settings_urlpath }}">Manage</a></td>
+    		</tr> 
+    		{% endfor %}
+    	</table>
+    	{% endif %}
 
-	</div>
-</div>	
+    </div>
+    
+    <div class="span3">
+      {% if profile.facebook %}
+      <img
+        src="http://graph.facebook.com/{{ profile.facebook.profile.id }}/picture?width=200&height=200"
+        class="img-circle"
+      />
+      <br />
+      {% endif %}
 
+       <dl>
+        {% if profile.location %}
+         <dt>Location</dt>
+         <dd>{{ profile.location }}</dd>
+        {% endif %}
+
+        {% if profile.website %}
+         <dt>Website</dt>
+         <dd><a href="http://{{ profile.website }}" rel="nofollow">{{ profile.website }}</a></dd>
+        {% endif %}
+
+         <dt>Joined</dt>
+         <dd>{{ profile.created | date("M j, Y", "+11") }}</dd>
+
+       </dl>
+       <p>
+        {% if profile.facebook %}
+        <a href="{{ profile.facebook.profile.link }}"><i class="icon-facebook-sign icon-2x"></i></a>
+        {% endif %}
+
+        {% if profile.twitter %}
+        <a href="{{ profile.twitter.profile.link }}"><i class="icon-twitter-sign icon-2x"></i></a>
+        {% endif %}
+
+        {% if profile.linkedin %}
+        <a href="{{ profile.linkedin.profile.link }}"><i class="icon-linkedin-sign icon-2x"></i></a>
+        {% endif %}
+       </p>
+
+    </div>
+  </div>
 </div>
 
 {% endblock %}
