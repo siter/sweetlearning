@@ -1,0 +1,10 @@
+<h2>My Schools</h2>
+{% if schools %}
+<table class="table table-striped table-hover">
+  {% for school in schools %}
+  <tr>
+    <td>{% if !school.status.active %}<span class="label label-important">NOT ACTIVE</span>{% endif %} <a href="{{ school.urlpath }}">{{ school.name}}</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}

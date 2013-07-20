@@ -15,36 +15,26 @@ exports.preload = function(req, res, next) {
 }
 
 
-// profile
 exports.private_profile = function(req, res){
-  
-  res.locals.profile = req.user;
-  
-    var get_schools = function(){
-      var d = Q.defer();    
-      School.find({'admins': req.user.id}, function(err, schools){
-        res.locals.schools = schools;
-        d.resolve();
-      })
-      return d.promise;
-    };
-      
-    get_schools()
-      .then(function() {
-        res.render('member/profile')      
-      })
-      .done();
-  
+
+  get_member_admin_schools(req.user.id)
+    .then(function(schools) {
+      res.locals.profile = req.user;
+      res.locals.schools = schools;
+      res.render('member/profile')
+
+    })
+    .done();
 };
 
-// loads schools for logged-in member
-function loadMemberSchools() {
-  School.find({'admins': req.user.id}, function(err, schools){
-    res.locals.schools = schools;
-  });
-
-  return true;
+function get_member_admin_schools(id){
+  var d = Q.defer();
+  School.find({'admins': id}, function(err, schools){
+    d.resolve(schools);
+  })
+  return d.promise;
 }
+
 
 exports.public_profile = function(req, res){
   var memberid = req.params.memberid;
@@ -57,6 +47,7 @@ exports.public_profile = function(req, res){
     }
   });
 };
+
 
 exports.settings_schools = function(req, res){
   res.locals.section = "schools";
@@ -81,7 +72,7 @@ exports.settings_info = function(req, res){
 
     // TODO: validate data
 
-    me.name = new_data.name;-
+    me.name = new_data.name;
     me.website = new_data.website;
     me.location = new_data.location;
     me.bio = new_data.bio;

@@ -1,11 +1,11 @@
-{% extends 'layouts/layout.html' %}
+{% extends 'app/layout.html' %}
 
 {% block title %}Profile of {{ profile.name.display }}{% endblock %}
 
 {% block pagecontent %}
 
 {% if profile.id == member.id %}
- <a href="/settings" class="editaction">Edit</a>
+<a href="/settings" class="editaction">Edit Profile</a>
 {% endif %}
 
 <div class="container">
@@ -16,21 +16,11 @@
       <h1>{{ profile.name.display }}</h1>
 
       <p class="lead">{{ profile.bio }}</p>
-      
-      <h2>Schools</h2>
-    	{% if schools %}
-    	<table class="table table-striped table-hover">
-    		{% for school in schools %}
-    		<tr>
-    			<td>{% if !school.status.active %}<span class="label label-important">NOT ACTIVE</span>{% endif %} <a href="{{ school.urlpath }}">{{ school.name}}</a></td>
-    			<td><a href="{{ school.settings_urlpath }}">Manage</a></td>
-    		</tr> 
-    		{% endfor %}
-    	</table>
-    	{% endif %}
+
+      {% include 'member/_schools.html' %}
 
     </div>
-    
+
     <div class="span3">
       {% if profile.facebook %}
       <img

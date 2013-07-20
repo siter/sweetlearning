@@ -1,20 +1,20 @@
-{% extends 'layouts/layout.html' %}
+{% extends 'app/layout.html' %}
 
 {% block title %}{{ school.name }} - School Information{% endblock %}
 
 {% block pagecontent %}
 
 {% if isadmin %}
-<a href="{{ school.settings_urlpath }}" class="editaction">Edit</a>
+<a href="{{ school.settings_urlpath }}" class="editaction">Edit School</a>
 {% endif %}
 
 <!-- {{ school._id }} -->
 <div class="container">
 	<div class="page-header">
 		<h1>
-			{{ school.name }} 
+			{{ school.name }}
 		</h1>
-		
+
 		{% if school.summary %}
 		<p class="lead">{{ school.summary }}</p>
 		{% endif %}
@@ -48,9 +48,9 @@
 			{% endif %}
 		</ul>
 		{% endif %}
-		
+
 	</div>
-	
+
 	<div class="row">
 		<div class="span4 pull-right">
 			<!-- <ul class="nav nav-tabs nav-stacked">
@@ -65,8 +65,8 @@
 			{{ school.description }}
 			{% endautoescape %}
 			</p>
-			{% endif %}			
+			{% endif %}
 		</div>
-	</div>	
+	</div>
 </div>
 {% endblock %}
