@@ -1,10 +1,10 @@
-{% extends 'schooladmin/_layout.html' %}
+{% extends '_layout.html' %}
 
 {% block settingscontent %}
 <form method="POST" action="{{ school.settings_urlpath }}/description">
     <label for="inputSummary">Summary</label><small class="help-block" >Max 140 letters. Used in listings and at the top of school page.</small>
 	<textarea class="span7" id="inputSummary"  rows="2" name="school[summary]" placeholder="Quick Summary" class="span6" maxlength="140">{{ school.summary }}</textarea>
-	 
+
     <label for="inputDescription">Description</label><small class="help-block" >School description can be as detailed as you want. Use Markdown for formatting. <a href="#">Need Help?</a></small>
 	<textarea class="span7" id="inputDescription" data-toggle="autogrow" rows="10" name="school[description_md]" placeholder="About your school" class="span6">{{ school.description_md }}</textarea>
 

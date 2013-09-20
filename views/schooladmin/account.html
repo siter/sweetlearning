@@ -1,16 +1,18 @@
-{% extends 'schooladmin/_layout.html' %}
+{% extends '_layout.html' %}
 
 {% block settingscontent %}
 <section id="active"  class="sl-section">
+		<small class="muted">ID:&nbsp;{{school.id|upper}}</small>
+
 <form method="POST" action="{{ school.settings_urlpath }}/account">
     <label for="inputName">School Name</label>
 	<input type="text" id="inputName" class="input-large" placeholder="School Name"  name="school[name]" value="{{ school.name }}" maxlength="{{ school.name_maxlength }}" />
-		
+
 	<label for="inputWebname">Webname</label>
 	<input type="text" id="inputWebname" class="input-large" placeholder="School Name"  name="school[webname]" value="{{ school.webname }}"  maxlength="{{ school.webname_maxlength }}"  />
 	<small class="help-block" >{{ baseurl }}/<b>{{ school.webname }}</b></small>
 	<div class="alert alert-info" ><i class="icon-info-sign"></i> Links from other sites will stop working if you change the webname.</div>
-	 
+
     <div class="form-actions">
         <button type="submit" class="btn btn-primary">Save</button>
     </div>
@@ -27,7 +29,7 @@
 	When school is active, everyone can see it.
 </p>
 <form method="POST" action="{{ school.settings_urlpath }}/account/setactive">
-	
+
 	<div class="form-actions">
 		<button type="submit" class="btn">Deactivate</button> <small class="hint">Admins will still have access to edit it</small>
 		<input type="hidden" name="status" value="false" />
@@ -42,7 +44,7 @@
 	When school is Hidden only admins can see it.
 </p>
 <form method="POST" action="{{ school.settings_urlpath }}/account/setactive">
-	
+
 	<div class="form-actions alert alert-block">
 		<button type="submit" class="btn btn-primary">Activate</button>	<span class="hint">Everyone will be able to see it</span>
 		<input type="hidden" name="status" value="true" />
@@ -54,7 +56,7 @@
 </section>
 
 <small class="pull-right"><a href="#deleteModal" role="button" class="-btn -btn-small" data-toggle="modal">Delete This School</a></small>
-	
+
 
 <!-- Modal -->
 <div id="deleteModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="DeleteSchoolDialog" aria-hidden="true">

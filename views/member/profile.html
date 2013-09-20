@@ -1,4 +1,4 @@
-{% extends 'app/layout.html' %}
+{% extends '../app/layout.html' %}
 
 {% block title %}Profile of {{ profile.name.display }}{% endblock %}
 
@@ -17,7 +17,7 @@
 
       <p class="lead">{{ profile.bio }}</p>
 
-      {% include 'member/_schools.html' %}
+      {% include '_schools.html' %}
 
     </div>
 

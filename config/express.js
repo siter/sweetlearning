@@ -17,26 +17,19 @@ module.exports = function(app){
 
   app.use(express.favicon(app.get('root') + '/public/assets/img/l_400.png'));
 
-  var options = {
-    root: app.get('views'),//__dirname + '/views',
-    allowErrors: true, // allows errors to be thrown and caught by express instead of suppressed
-    filters: require('../lib/swigfilters')
-  }
-
-  if ('development' == app.get('env')) {
-    options['cache'] = false;
-  }
-
-  swig.init(options);
+  require('../lib/swigfilters')(swig);
 
   app.use(express.bodyParser());
   app.use(express.methodOverride());
 
   app.use(express.static(app.get('public')));
-  app.engine('html', cons.swig);
   app.set('view engine', 'html');
+  app.engine('html', swig.renderFile);
+  app.set('views', app.get('views'));
 
   if ('development' == app.get('env')) {
+    console.log('dev');
+    app.set('view cache', false);
     app.use(express.errorHandler());
     app.use(express.logger('dev'));
   }

@@ -1,16 +1,16 @@
-{% extends 'app/layout.html' %}
+{% extends '../app/layout.html' %}
 
 {% block title %}Editing {{ school.name }} (School){% endblock %}
 
 {% block pagecontent %}
 <div class="container editor">
 	<div class="page-header">
+		<b>{{ school.name }}</b>
 		<h1><span class="muted">Edit<span class="hidden-phone"> School</span></span> {{sections[section]}}</h1>
 		{% if !school.status.active %}
 			<a href="{{ school.settings_urlpath }}/account"><span class="label label-important">NOT ACTIVE</span></a>
 		{% endif %}
-		<a href="{{ school.urlpath }}"><i class="icon-circle-arrow-left hidden-phone"></i> <b>{{ school.name }}</b></a>
-		<small class="muted">ID:&nbsp;{{school.id|upper}}</small>
+		<a href="{{ school.urlpath }}" class="btn btn-small"><i class="icon-circle-arrow-left hidden-phone"></i> <b>View School</b></a>
 
 	</div>
 
@@ -28,8 +28,7 @@
 			  </li>
 			  {% endfor %}
 			  <li class="divider"></li>
-			  <li ><small><a href="{{ school.urlpath }}"> Public School Profile</a></small></li>
-			  <li ><small><a href="/settings/schools"> List of Managed Schools</a></small></li>
+			  <li ><small><a href="/settings/schools"> Your School Manager</a></small></li>
 			</ul>
 			</div>
 		</div>

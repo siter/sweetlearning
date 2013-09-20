@@ -8,26 +8,28 @@
     "start": "node app"
   },
   "dependencies": {
-    "underscore": "1.4.x",
-    "express": "latest",
-    "consolidate": "latest",
-    "swig": "latest",
-    "mongoose": "3.6.x",
-    "connect-redis": "1.4.x",
-    "hiredis": "0.1.15",
-    "robotskirt": "2.7.x",
-    "passport": "0.1.17",
-    "passport-local": "0.1.6",
-    "passport-facebook": "0.1.5",
-    "sendgrid": "0.2.x",
-    "useragent": "2.0.x",
-    "moment": "2.0.x",
-    "redis-url": "0.1.x",
-    "validator": "1.1.x",
+    "underscore": "~1.4.4",
+    "express": "~3.3.5",
+    "consolidate": "~0.9.1",
+    "swig": "~1.0.0-pre2",
+    "mongoose": "~3.6.17",
+    "connect-redis": "~1.4.5",
+    "hiredis": "~0.1.15",
+    "robotskirt": "~2.7.1",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "passport-facebook": "~0.1.5",
+    "sendgrid": "~0.2.12",
+    "useragent": "~2.0.7",
+    "moment": "~2.0.0",
+    "redis-url": "~0.1.0",
+    "validator": "~1.1.3",
     "q": "~0.9.6"
   },
   "devDependencies": {
-    "vows": "0.7.x"
+    "vows": "0.7.x",
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.2"
   },
   "engines": {
     "node": "0.10.x"

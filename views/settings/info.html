@@ -1,4 +1,4 @@
-{% extends 'settings/_layout.html' %}
+{% extends '_layout.html' %}
 
 {% block settingscontent %}
 	<form class="form-horizontal" method="POST" action="/settings/info">
@@ -35,7 +35,7 @@
 			  <span class="add-on">http://</span>
 		      <input type="text" id="inputWebsite" placeholder="www.example.com"  name="settings[website]" value="{{ settings.website }}">
 			</div>
-			
+
 	    </div>
 	  </div>
 	  #}
@@ -49,7 +49,7 @@
 
 	  <div class="control-group">
 	    <div class="controls">
-	      <button type="submit" class="btn btn-large">Save Settings</button>
+	      <button type="submit" class="btn btn-large">Save Profile</button>
 	    </div>
 	  </div>
 	  <input type="hidden" name="_csrf" value="{{ csrf_token }}" />

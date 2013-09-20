@@ -1,22 +1,22 @@
-{% extends 'settings/_layout.html' %}
+{% extends '_layout.html' %}
 
 {% block settingscontent %}
-	
+
 	{% if schools %}
 	<table class="table table-striped table-hover">
 		{% for school in schools %}
 		<tr>
 			<td>{% if !school.status.active %}<span class="label label-important">NOT ACTIVE</span>{% endif %} <a href="{{ school.urlpath }}">{{ school.name}}</a></td>
 			<td><a href="{{ school.settings_urlpath }}">Manage</a></td>
-		</tr> 
+		</tr>
 		{% endfor %}
 	</table>
 	{% endif %}
 	<p>
 	<a href="#myModal" role="button" class="btn btn-large" data-toggle="modal">Create New School</a>
 	</p>
-		
- 
+
+
 	<!-- Modal -->
 	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-header">
@@ -36,6 +36,6 @@
 		  </div>
 		</form>
 	</div>
-	
+
 
 {% endblock %}

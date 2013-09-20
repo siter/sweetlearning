@@ -1,4 +1,4 @@
-{% extends 'schooladmin/_layout.html' %}
+{% extends '_layout.html' %}
 
 {% block settingscontent %}
 
@@ -12,7 +12,7 @@
 	<tr>
 		<td>{% if !course.status.active %}<span class="label label-important">NOT ACTIVE</span>{% endif %} <a href="{{ course.urlpath }}">{{ course.name}}</a></td>
 		<td><a href="{{ course.settings_urlpath }}">Manage</a></td>
-	</tr> 
+	</tr>
 	{% endfor %}
 </table>
 {% else %}
